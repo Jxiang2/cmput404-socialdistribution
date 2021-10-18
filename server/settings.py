@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'sdapis',
 ]
 
+AUTH_USER_MODEL = 'sdapis.Author'
+
 REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
