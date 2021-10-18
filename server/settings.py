@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-4cna5$g@^8%si5y)kpa4n4+xm1d&_lzw87@=hml=(&lr2+&jc$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://c404project.herokuapp.com']
 
 
 # Application definition
@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     #myapps
     'sdapis',
 ]
+
+AUTH_USER_MODEL = 'sdapis.Author'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
