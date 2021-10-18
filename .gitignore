@@ -1,17 +1,8 @@
-# Our Ignore Files
-site/
-.DS_Store
-/client/node_modules
-/client/package-lock.json
-/avonmore_env/
-
 # Django #
 *.log
 *.pot
 *.pyc
 __pycache__
-/client/src/config.js
-
 db.sqlite3
 media
 
