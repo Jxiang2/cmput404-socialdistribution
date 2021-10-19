@@ -21,7 +21,7 @@ class Author(AbstractUser):
     REQUIRED_FIELDS = ['username']
 
     def get_id(self):
-        return HOST_NAME + "/author/" + self.author_id
+        return HOST_NAME + "/api" + "/author/" + self.author_id
 
     def get_host(self):
         return HOST_NAME
