@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 import uuid
-
+from django.contrib.sites.models import Site
 from django.db.models.deletion import CASCADE
 
 
@@ -13,21 +13,17 @@ class Author(AbstractUser):
     email = models.EmailField(max_length=100, unique=True)
     username = models.CharField(max_length=100)
     is_admin = models.BooleanField(default=False)
-
     author_id = models.CharField(unique=True, default=uuid_hex, editable=False, max_length=100)
     github = models.CharField(max_length=200, blank=True)
-
-    display_name = models.CharField(max_length=500, default="Your Display Name")
     profile_image = models.CharField(max_length=500, null=True)
-
     USERNAME_FIELD = 'email' # use email to login
     REQUIRED_FIELDS = ['username']
 
     def get_id(self):
-        return settings.HOST_URL + "author/" + self.authorID
+        return Site.objects.get_current().domain + "author/" + self.author_id
 
     def get_host(self):
-        return settings.HOST_URL
+        return Site.objects.get_current().domain
 
     def get_type(self):
         return "author"
@@ -51,7 +47,7 @@ class Post(models.Model):
 
 
     def get_post_id(self):
-        return "{}author/{}/posts/{}".format(settings.HOST_URL, self.authorID, str(self.postID))
+        return "{}author/{}/posts/{}".format(settings.HOST_URL, self.post_author.author_id, str(self.post_id))
 
     def get_type(self):
         return "post"
@@ -69,7 +65,7 @@ class Comment(models.Model):
     # return settings.HOST_URL + "author/" + self.authorID
 
     def get_comment_id(self):
-        return "{}author/{}/posts/{}/comments/{}".format(settings.HOST_URL, self.author_write_article_ID, str(self.postID.postID),str(self.commentID))
+        return "{}author/{}/posts/{}/comments/{}".format(settings.HOST_URL, self.comment_author.author_id, str(self.post_of_comment.post_id),str(self.comment_id))
 
     def get_type(self):
         return "comment"
