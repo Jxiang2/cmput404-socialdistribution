@@ -11,8 +11,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import django_on_heroku
 from pathlib import Path
+import socket
 import os
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,19 +41,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'django.contrib.sites',
 
     #myapps
     'sdapis',
 ]
 
-SITE_ID = 1
 
 AUTH_USER_MODEL = 'sdapis.Author'
 
 REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
+
+HOST_NAME = os.environ.get('BASE_IRI', '127.0.0.1')
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',

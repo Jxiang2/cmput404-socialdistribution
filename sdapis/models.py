@@ -1,12 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.deletion import CASCADE
+from django.conf import settings
 import uuid
-import socket
-import os
 
-HOST_NAME = os.environ.get('HOSTNAME')
 
+HOST_NAME = settings.HOST_NAME
 
 def uuid_hex():
     return uuid.uuid4().hex
@@ -22,7 +21,7 @@ class Author(AbstractUser):
     REQUIRED_FIELDS = ['username']
 
     def get_id(self):
-        return HOST_NAME + "author/" + self.author_id
+        return HOST_NAME + "/author/" + self.author_id
 
     def get_host(self):
         return HOST_NAME
