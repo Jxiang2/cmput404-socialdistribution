@@ -6,7 +6,7 @@ from rest_framework import status
 from sdapis.models import Author
 from sdapis.serializers import RegistrationSerializer, AuthorSerializer
 from sdapis.permissions import AccessPermission, CustomAuthentication
-from .helper import is_valid_node
+from sdapis.views.helper import is_valid_node
 
 @api_view(['GET', 'POST'])
 @authentication_classes([CustomAuthentication])
