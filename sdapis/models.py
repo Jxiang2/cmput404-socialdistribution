@@ -1,9 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.conf import settings
-import uuid
-from django.contrib.sites.models import Site
 from django.db.models.deletion import CASCADE
+import uuid
+import socket
+import os
+
+HOST_NAME = os.environ.get('HOSTNAME')
 
 
 def uuid_hex():
@@ -20,10 +22,10 @@ class Author(AbstractUser):
     REQUIRED_FIELDS = ['username']
 
     def get_id(self):
-        return Site.objects.get_current().domain + "author/" + self.author_id
+        return HOST_NAME + "author/" + self.author_id
 
     def get_host(self):
-        return Site.objects.get_current().domain
+        return HOST_NAME
 
     def get_type(self):
         return "author"
@@ -47,7 +49,7 @@ class Post(models.Model):
 
 
     def get_post_id(self):
-        return "{}author/{}/posts/{}".format(settings.HOST_URL, self.post_author.author_id, str(self.post_id))
+        return "{}author/{}/posts/{}".format(HOST_NAME, self.post_author.author_id, str(self.post_id))
 
     def get_type(self):
         return "post"
@@ -65,7 +67,7 @@ class Comment(models.Model):
     # return settings.HOST_URL + "author/" + self.authorID
 
     def get_comment_id(self):
-        return "{}author/{}/posts/{}/comments/{}".format(settings.HOST_URL, self.comment_author.author_id, str(self.post_of_comment.post_id),str(self.comment_id))
+        return "{}author/{}/posts/{}/comments/{}".format(HOST_NAME, self.comment_author.author_id, str(self.post_of_comment.post_id),str(self.comment_id))
 
     def get_type(self):
         return "comment"
