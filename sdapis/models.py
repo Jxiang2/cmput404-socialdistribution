@@ -16,6 +16,8 @@ class Author(AbstractUser):
     authorID = models.CharField(unique=True, default=uuid_hex, editable=False, max_length=100)
     github = models.CharField(max_length=200, blank=True)
 
+    about_me = models.CharField(max_length=500, default="something about you!")
+
     USERNAME_FIELD = 'email' # use email to login
     REQUIRED_FIELDS = ['username']
 
