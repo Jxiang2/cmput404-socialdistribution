@@ -52,7 +52,7 @@ REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
-HOST_NAME = os.environ.get('BASE_IRI', '127.0.0.1')
+HOST_NAME = os.environ.get('BASE_IRI', 'http://127.0.0.1:8000')
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',

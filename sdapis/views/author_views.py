@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import serializers, status
 from sdapis.models import Author
 from sdapis.serializers import RegistrationSerializer, AuthorSerializer
 from sdapis.permissions import AccessPermission, CustomAuthentication
@@ -20,7 +20,12 @@ def register(request):
         # get all authors sort by display name
         authors = Author.objects.filter(~Q(email="c404t21@admin.com")).order_by('username')
         serializer = AuthorSerializer(authors, many=True)
-        return Response(serializer.data)
+        custom_data = {
+            'type': 'authors',
+            #You're getting this error as the HyperlinkedIdentityField expects to receive request in context of the serializer so it can build absolute URLs.
+            'items': serializer.data
+        }
+        return Response(custom_data)
 
     else:
         # register an account
