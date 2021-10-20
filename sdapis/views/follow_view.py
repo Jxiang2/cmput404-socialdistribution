@@ -23,11 +23,28 @@ def get_followers(author_id):
             follower = Author.objects.get(author_id=follower_id)
             serializer = AuthorSerializer(follower)
             followers.append(serializer.data)
-        #used to connect remote nodes' authors
+        # used to connect remote nodes' authors
         except not follow.exists():
             if follower_id in remote:
                 followers.append(follower)
     return followers
+
+def get_followings(author_id):
+    follow = Follow.objects.filter(author2=author_id)
+    follow_serializer = FollowSerializer(follow, many=True)
+    followings = []
+    remote = []
+    for author in follow_serializer.data:
+        following_id = author['author1']
+        try:
+            following_author = Author.objects.get(author_id=following_id)
+            author_serializer = AuthorSerializer(following_author)
+            followings.append(author_serializer.data)
+        # used to connect remote nodes' authors
+        except not follow.exists():
+            if following_id in remote: 
+                followings.append(following_author)
+    return followings
 
 
 @api_view(['GET'])
@@ -46,6 +63,7 @@ def follower_list(request, author_id): # GET: get a list of authors who are thei
 @api_view(['GET', 'DELETE', 'PUT'])
 @authentication_classes([CustomAuthentication])
 @permission_classes([AccessPermission])
+#author_id2 follows author_id
 def follower(request, author_id, author_id2):
     valid = is_valid_node(request)
     # ckeck if a valid node
@@ -75,6 +93,34 @@ def follower(request, author_id, author_id2):
             follow = Follow.objects.get(author1=author_id, author2=author_id2)
         except Follow.DoesNotExist:
             # not a follower
-            return Response({'message':"not a follower"}, status=status.HTTP_200_OK)
+            return Response({"message":"not a follower"}, status=status.HTTP_200_OK)
         follow.delete()
-        return Response({'message':'success remove'}, status=status.HTTP_200_OK)
+        return Response({"message":"success remove"}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@authentication_classes([CustomAuthentication])
+@permission_classes([AccessPermission])
+def following_list(request, author_id):
+    valid = is_valid_node(request)
+    if not valid:
+        return Response({"message" : "not a valid node"}, status=status.HTTP_403_FORBIDDEN)
+
+    followings = get_followings(author_id)
+    return Response({"type" : "followings" , "items" : followings}, status=status.HTTP_200_OK)
+
+@api_view(['DELETE'])
+@authentication_classes([CustomAuthentication])
+@permission_classes([AccessPermission])
+#author_id2 unfollows author_id
+def unfollow(request, author_id, author_id2):
+    valid = is_valid_node(request)
+    if not valid:
+        return Response({"message" : "not a valid node"}, status=status.HTTP_403_FORBIDDEN)
+
+    if request.method == "DELETE":
+        try:
+            follow = Follow.objects.get(author1=author_id, author2=author_id2)
+        except Follow.DoesNotExist:
+            return Response({"message" : "Not a follower"}, status=status.HTTP_200_OK)
+        follow.delete()
+        return Response({"message" : "Success"}, status=status.HTTP_200_OK)
