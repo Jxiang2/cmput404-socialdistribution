@@ -49,7 +49,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'sdapis.Author'
 
 REST_FRAMEWORK = {
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 
 HOST_NAME = os.environ.get('BASE_IRI', 'http://127.0.0.1:8000')
