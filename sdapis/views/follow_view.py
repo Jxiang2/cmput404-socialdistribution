@@ -52,13 +52,6 @@ def follower(request, author_id, author_id2):
     if not valid:
         return Response({"message":"not a valid node"}, status=status.HTTP_403_FORBIDDEN)
 
-    # check if follower
-    if request.method == "GET":
-        if Follow.objects.filter(author1=author_id, author2=author_id2).exists():
-            return Response({"message":"indeed a follower"}, status=status.HTTP_200_OK)
-        else:
-            return Response({"message":"not a follower"}, status=status.HTTP_200_OK)
-
     # Add a follower
     elif request.method == "PUT": 
         if Follow.objects.filter(author1=author_id, author2=author_id2).exists():
@@ -68,6 +61,13 @@ def follower(request, author_id, author_id2):
             follow = Follow(author1=author_id, author2=author_id2)
             follow.save()
             return Response({"message":"success add"}, status=status.HTTP_200_OK)
+
+    # check if follower
+    if request.method == "GET":
+        if Follow.objects.filter(author1=author_id, author2=author_id2).exists():
+            return Response({"message":"indeed a follower"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message":"not a follower"}, status=status.HTTP_200_OK)
 
     # remove an existing follower
     elif request.method == "DELETE":
