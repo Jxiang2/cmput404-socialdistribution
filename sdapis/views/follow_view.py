@@ -63,8 +63,12 @@ def follower_list(request, author_id): # GET: get a list of authors who are thei
 @api_view(['GET', 'DELETE', 'PUT'])
 @authentication_classes([CustomAuthentication])
 @permission_classes([AccessPermission])
-#author_id2 follows author_id
 def follower(request, author_id, author_id2):
+    '''
+    author_id2 follows author_id,
+    author_id1 view followers, 
+    author_id1 remove author_id2 as a follower,
+    '''
     valid = is_valid_node(request)
     # ckeck if a valid node
     if not valid:
@@ -107,20 +111,3 @@ def following_list(request, author_id):
 
     followings = get_followings(author_id)
     return Response({"type" : "followings" , "items" : followings}, status=status.HTTP_200_OK)
-
-@api_view(['DELETE'])
-@authentication_classes([CustomAuthentication])
-@permission_classes([AccessPermission])
-#author_id2 unfollows author_id
-def unfollow(request, author_id, author_id2):
-    valid = is_valid_node(request)
-    if not valid:
-        return Response({"message" : "not a valid node"}, status=status.HTTP_403_FORBIDDEN)
-
-    if request.method == "DELETE":
-        try:
-            follow = Follow.objects.get(author1=author_id, author2=author_id2)
-        except Follow.DoesNotExist:
-            return Response({"message" : "Not a follower"}, status=status.HTTP_200_OK)
-        follow.delete()
-        return Response({"message" : "Success"}, status=status.HTTP_200_OK)
