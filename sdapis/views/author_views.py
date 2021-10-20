@@ -80,14 +80,15 @@ def author_detail(request, author_id):
             return Response({"message" : "successful post"}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#login/out can be added later if needed
+#login
+#need to be refined!
 @api_view(['POST'])
 @authentication_classes([CustomAuthentication])
 @permission_classes([AccessPermission])
 def login_view(request):
-    user = authenticate(request, email=request.data['email'], password=request.data['password'])
-    print(user)
-    if user is not None:
-        return Response({'authorID':user.author_id}, status=status.HTTP_200_OK)
+    author = authenticate(request, email=request.data['email'], password=request.data['password'])
+    print(author)
+    if author is not None:
+        return Response({'authorID':author.author_id}, status=status.HTTP_200_OK)
     else:
         return Response({'message':"incorrect email or password"}, status=status.HTTP_401_UNAUTHORIZED)
