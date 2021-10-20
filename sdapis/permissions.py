@@ -26,3 +26,4 @@ class CustomAuthentication(authentication.BaseAuthentication):
 
     def authenticate_header(self, request):
         return '{"username" : <username>, "password" : <password>}'
+

@@ -28,6 +28,12 @@ class AuthorSerializer(serializers.ModelSerializer):
         model = Author
         fields = ['type', 'id', 'url', 'host', 'displayName', 'github', 'profile_image']
 
+class FollowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Follow
+        # author2 follows author1
+        fields = ['author1', 'author2']
+
 class NodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Node
