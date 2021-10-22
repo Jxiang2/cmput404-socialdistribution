@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import author_views, follow_views
+from .views import author_views, follow_views, post_views
 urlpatterns = [
     # author
     path('api/author/', author_views.author_list),
@@ -15,5 +15,7 @@ urlpatterns = [
     path('api/author/<str:author_id>/followings/', follow_views.following_list),
     # author_id2 follows author_id
     path('api/author/<str:author_id>/followers/<str:author_id2>/', follow_views.follower),
+
+    path('api/author/<str:author_id>/posts/', post_views.post_view),
 
 ]

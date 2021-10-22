@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.postgres.fields import ArrayField
 from django.db.models.deletion import CASCADE
 from django.conf import settings
 import uuid
@@ -38,17 +39,22 @@ class Post(models.Model):
     contentType = models.CharField(max_length=20, default="text/plain")
     content = models.TextField()
     # author 1 <-> * post
-    post_author = models.ForeignKey(Author, on_delete=CASCADE)
+    author_id = models.CharField(max_length=100, default="no author")
+    comment_list = ArrayField(models.JSONField(), default=list)
     
     #category will be added in the next part!
     #visibility will be adde in the next part!
 
+    count = models.IntegerField(default=0)
     published = models.DateTimeField(auto_now_add=True)
     unlisted = models.BooleanField(default=False)
 
 
     def get_post_id(self):
-        return "{}author/{}/posts/{}".format(HOST_NAME, self.post_author.author_id, str(self.post_id))
+        return "{}author/{}/posts/{}".format(HOST_NAME, self.author_id, str(self.post_id))
+
+    def get_comments_url(self):
+        return self.get_post_id() + "/comments"
 
     def get_type(self):
         return "post"
@@ -61,7 +67,7 @@ class Comment(models.Model):
     # author 1 <-> * comment
     comment_author = models.ForeignKey(Author, on_delete=CASCADE)
     # post 1 <-> * comment
-    post_of_comment = models.ForeignKey(Post, on_delete=CASCADE)
+    post = models.ForeignKey(Post, on_delete=CASCADE)
     # def get_id(self):
     # return settings.HOST_URL + "author/" + self.authorID
 

@@ -38,3 +38,25 @@ class NodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Node
         fields = ['host']
+
+class PostSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(source='get_post_id', required=False)
+    type = serializers.CharField(source='get_type', required=False)
+
+    #comments = serializers.URLField(source='get_comments_url', required=False)
+    
+
+    def to_representation(self, instance):
+        response = super(PostSerializer, self).to_representation(instance)
+        author = Author.objects.get(author_id=instance.author_id)
+        author_serializer = AuthorSerializer(author)
+        response['author'] = author_serializer.data # add author data
+        #response['comment_list'] = instance.comment_list[:5]
+
+        return response
+
+    class Meta:
+        model = Post
+        #comments will be added later
+        fields = ['type', 'title', 'id', 'author_id', 'post_id', 'source', 'origin', 'description', 'contentType',
+            'content', 'count','published', 'unlisted']
