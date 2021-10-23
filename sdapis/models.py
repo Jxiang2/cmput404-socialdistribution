@@ -5,6 +5,8 @@ from django.db.models.deletion import CASCADE
 from django.conf import settings
 import uuid
 
+from django.db.models.fields import CharField
+
 
 HOST_NAME = settings.HOST_NAME
 
@@ -42,6 +44,16 @@ class Post(models.Model):
     # author 1 <-> * post
     author_id = models.CharField(max_length=100, default="no author")
     comment_list = ArrayField(models.JSONField(), default=list)
+
+    PUBLIC = 'PUBLIC'
+    FRIENDS = 'FRIEND'
+
+    STATUS_CHOICES = [
+        (PUBLIC, 'public'),
+        (FRIENDS, 'friend'),
+    ]
+    visibility = models.CharField(choices=STATUS_CHOICES, default=PUBLIC, max_length=6)
+    category = CharField(max_length=200, default="Web Tutorial")
     
     #category will be added in the next part!
     #visibility will be adde in the next part!

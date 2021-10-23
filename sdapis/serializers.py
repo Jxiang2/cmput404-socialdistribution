@@ -52,6 +52,7 @@ class InboxSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     post_id = serializers.CharField(source='get_post_id', required=False)
     type = serializers.CharField(source='get_type', required=False)
+    category = serializers.CharField(required=True)
     #comments = serializers.URLField(source='get_comments_url', required=False)
     
     def get_local_now():
@@ -74,4 +75,4 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         #comments will be added later
         fields = ['type', 'title', 'description', 'content','post_id', 
-        'author_id', 'contentType', 'count','published', 'unlisted']
+        'author_id', 'contentType', 'count','published', 'visibility', 'category', 'unlisted']
