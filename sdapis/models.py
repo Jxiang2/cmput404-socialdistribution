@@ -33,6 +33,7 @@ class Author(AbstractUser):
 class Post(models.Model):
     title = models.CharField(max_length=200)
     post_id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
+
     source = models.URLField(max_length=200)
     origin = models.URLField(max_length=200)
     description = models.TextField(default= "description of the post")
@@ -51,10 +52,7 @@ class Post(models.Model):
 
 
     def get_post_id(self):
-        return "{}author/{}/posts/{}".format(HOST_NAME, self.author_id, str(self.post_id))
-
-    def get_comments_url(self):
-        return self.get_post_id() + "/comments"
+        return "{}/author/{}/posts/{}".format(HOST_NAME, self.author_id, str(self.post_id))
 
     def get_type(self):
         return "post"

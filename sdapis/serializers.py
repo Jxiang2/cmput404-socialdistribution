@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from django.utils import timezone
+from tzlocal import get_localzone
 from .models import *
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -42,21 +44,26 @@ class NodeSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     id = serializers.CharField(source='get_post_id', required=False)
     type = serializers.CharField(source='get_type', required=False)
-
     #comments = serializers.URLField(source='get_comments_url', required=False)
     
+    def get_local_now():
+        local_tz = get_localzone()
+        timezone.activate(local_tz)
+        now = timezone.localtime(timezone.now())
+        return now
 
+    publushed = get_local_now()
+    
     def to_representation(self, instance):
         response = super(PostSerializer, self).to_representation(instance)
         author = Author.objects.get(author_id=instance.author_id)
         author_serializer = AuthorSerializer(author)
         response['author'] = author_serializer.data # add author data
         #response['comment_list'] = instance.comment_list[:5]
-
         return response
 
     class Meta:
         model = Post
         #comments will be added later
-        fields = ['type', 'title', 'id', 'author_id', 'post_id', 'source', 'origin', 'description', 'contentType',
-            'content', 'count','published', 'unlisted']
+        fields = ['type', 'title', 'description', 'content', 'id','post_id', 
+        'author_id', 'contentType', 'count','published', 'unlisted']
