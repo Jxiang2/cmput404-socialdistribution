@@ -1,7 +1,10 @@
 from django.urls import path
+from rest_framework.documentation import include_docs_urls
 from .views import author_views, follow_views, post_views, inbox_view
+
 urlpatterns = [
     # author
+    path('docs/', include_docs_urls(title='Social Distribution Api')),
     path('api/author/', author_views.author_list),
     path('api/author/<str:author_id>/', author_views.author_detail),
 
