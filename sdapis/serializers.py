@@ -41,8 +41,16 @@ class NodeSerializer(serializers.ModelSerializer):
         model = Node
         fields = ['host']
 
+class InboxSerializer(serializers.ModelSerializer):
+    type = serializers.CharField(source='get_type', required=False)
+    author = serializers.CharField(source='get_author')
+
+    class Meta:
+        model = Inbox
+        fields = ['type', 'author', 'items']
+
 class PostSerializer(serializers.ModelSerializer):
-    id = serializers.CharField(source='get_post_id', required=False)
+    post_id = serializers.CharField(source='get_post_id', required=False)
     type = serializers.CharField(source='get_type', required=False)
     #comments = serializers.URLField(source='get_comments_url', required=False)
     
@@ -65,5 +73,5 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         #comments will be added later
-        fields = ['type', 'title', 'description', 'content', 'id','post_id', 
+        fields = ['type', 'title', 'description', 'content','post_id', 
         'author_id', 'contentType', 'count','published', 'unlisted']

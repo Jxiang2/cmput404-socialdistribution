@@ -80,5 +80,15 @@ class Follow(models.Model):
     author1 = models.CharField(max_length=50)
     author2 = models.CharField(max_length=50)
 
+class Inbox(models.Model):
+    author_id = models.CharField(max_length=40, unique=True)
+    items = ArrayField(models.JSONField(), default=list) # array of objects
+
+    def get_author(self):
+        return settings.HOST_NAME + "author/" + self.author_id
+
+    def get_type(self):
+        return "inbox"
+
 class Node(models.Model):
     host = models.CharField(max_length=150)
