@@ -7,6 +7,23 @@ from sdapis.serializers import *
 from .helper import is_valid_node
 from sdapis.permissions import AccessPermission, CustomAuthentication
 
+def get_followers(author_id):
+    follow = Follow.objects.filter(author1=author_id)
+    serializer = FollowSerializer(follow, many=True)
+    followers = []
+    remote = []
+    for author in serializer.data:
+        follower_id = author['author2']
+        try:
+            follower = Author.objects.get(author_id=follower_id)
+            serializer = AuthorSerializer(follower)
+            followers.append(serializer.data)
+        # used to connect remote nodes' authors
+        except not follow.exists():
+            if follower_id in remote:
+                followers.append(follower)
+    return followers
+
 def get_followings(author_id):
     follow = Follow.objects.filter(author2=author_id)
     follow_serializer = FollowSerializer(follow, many=True)
@@ -66,3 +83,36 @@ def inbox_detail(request, author_id):
             inbox.items.insert(0, {"type": "Follow","summary":summary,"actor":new_follower_serialized,"object":author_serialized}) # append to items list
             inbox.save()
             return Response({'message':'sent successfully!'}, status=status.HTTP_200_OK)
+
+        elif content_type == "post":
+            post_id = request.data['post_id']
+            post = Post.objects.get(post_id=post_id)
+            item_serializer = PostSerializer(post)
+            data = item_serializer.data
+
+            try:
+                Author.objects.get(author_id=author_id) # check if local author
+                inbox, _ = Inbox.objects.get_or_create(author_id=author_id)
+                inbox.items.insert(0, data) # append to items list
+                inbox.save()
+                return Response({'message':'sent successfully!'}, status=status.HTTP_200_OK)
+            except Author.DoesNotExist:
+                return Response({'message': 'sent unsuccessfully!'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@authentication_classes([CustomAuthentication])
+@permission_classes([AccessPermission])
+def friend(request, authorID):
+    valid = is_valid_node(request)
+    if not valid:
+        return Response({"message":"Node not allowed"}, status=status.HTTP_403_FORBIDDEN)
+
+    followers_objects = get_followers(authorID) # get followers of author
+    friends = []
+    for f in followers_objects: # foreach follower f of author
+        follower_id = f['id'].split("/")[-1]
+        if Follow.objects.filter(author1=follower_id, author2=authorID).exists(): # check if author is also a follower of f
+            friends.append(f)
+    return Response({"type": "friends","items":friends}, status=status.HTTP_200_OK)
+            
