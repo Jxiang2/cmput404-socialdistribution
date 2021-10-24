@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.conf import settings
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,6 +8,8 @@ from sdapis.serializers import PostSerializer
 from sdapis.pagination import PostPagination
 from sdapis.permissions import AccessPermission, CustomAuthentication
 from .helper import is_valid_node
+
+HOST_NAME = settings.HOST_NAME
 
 
 
@@ -68,7 +71,7 @@ def post_detail_view(request, author_id, post_id):
         data = request.data
         data['id'] = post_id
         data['source'] = request.build_absolute_uri()
-        data['origin'] = request.build_absolute_uri()
+        data['origin'] = HOST_NAME
 
         serializer = PostSerializer(data=data)
         if serializer.is_valid():
