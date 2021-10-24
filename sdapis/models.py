@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import ArrayField
 from django.db.models.deletion import CASCADE
@@ -34,10 +35,10 @@ class Author(AbstractUser):
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
-    post_id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
+    id = models.CharField(primary_key=True, default=uuid_hex, unique=True, max_length=100)
 
-    source = models.URLField(max_length=200)
-    origin = models.URLField(max_length=200)
+    source = models.URLField(max_length=200, null=True)
+    origin = models.URLField(max_length=200, null=True)
     description = models.TextField(default= "description of the post")
     contentType = models.CharField(max_length=20, default="text/plain")
     content = models.TextField()
@@ -61,10 +62,9 @@ class Post(models.Model):
     count = models.IntegerField(default=0)
     published = models.DateTimeField(auto_now_add=True)
     unlisted = models.BooleanField(default=False)
-
-
+    
     def get_post_id(self):
-        return "{}/author/{}/posts/{}".format(HOST_NAME, self.author_id, str(self.post_id))
+        return "{}/author/{}/posts/{}".format(HOST_NAME, self.author_id, str(self.id))
 
     def get_type(self):
         return "post"
@@ -73,7 +73,7 @@ class Comment(models.Model):
     comment = models.TextField()
     contentType = models.CharField(max_length=20, default="text/plain")
     published = models.DateTimeField(auto_now_add=True)
-    comment_id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
+    comment_id = models.UUIDField(primary_key=True, default=uuid_hex, unique=True)
     # author 1 <-> * comment
     comment_author = models.ForeignKey(Author, on_delete=CASCADE)
     # post 1 <-> * comment

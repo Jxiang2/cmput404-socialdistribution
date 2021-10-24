@@ -31,13 +31,14 @@ def post_view(request, author_id):
         data = request.data
         data['author_id'] = author_id
         serializer = PostSerializer(data=data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({'message':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'DELETE'])
+@api_view(['GET', 'DELETE', 'PUT'])
 @authentication_classes([CustomAuthentication])
 @permission_classes([AccessPermission])
 def post_detail_view(request, author_id, post_id):
@@ -61,3 +62,16 @@ def post_detail_view(request, author_id, post_id):
             return Response({'message': "delete successful!"}, status=status.HTTP_200_OK)
         else:
             return Response({'message':"delete was unsuccessful"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    elif request.method == "PUT":
+        # create a new post with the given id
+        data = request.data
+        data['id'] = post_id
+        data['source'] = request.build_absolute_uri()
+        data['origin'] = request.build_absolute_uri()
+
+        serializer = PostSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({'message':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

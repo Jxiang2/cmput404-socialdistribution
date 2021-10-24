@@ -50,10 +50,11 @@ class InboxSerializer(serializers.ModelSerializer):
         fields = ['type', 'author', 'items']
 
 class PostSerializer(serializers.ModelSerializer):
-    post_id = serializers.CharField(source='get_post_id', required=False)
-    type = serializers.CharField(source='get_type', required=False)
+    id = serializers.CharField(source='get_post_id', required=False, read_only=True)
+    type = serializers.CharField(source='get_type', required=False, read_only=True)
     category = serializers.CharField(required=True)
     #comments = serializers.URLField(source='get_comments_url', required=False)
+
     
     def get_local_now():
         local_tz = get_localzone()
@@ -63,16 +64,17 @@ class PostSerializer(serializers.ModelSerializer):
 
     publushed = get_local_now()
     
-    def to_representation(self, instance):
+    def to_representation(self, instance: Post):
         response = super(PostSerializer, self).to_representation(instance)
         author = Author.objects.get(author_id=instance.author_id)
         author_serializer = AuthorSerializer(author)
         response['author'] = author_serializer.data # add author data
-        #response['comment_list'] = instance.comment_list[:5]
         return response
+
+
 
     class Meta:
         model = Post
         #comments will be added later
-        fields = ['type', 'title', 'description', 'content','post_id', 
-        'author_id', 'contentType', 'count','published', 'visibility', 'category', 'unlisted']
+        fields = ['type', 'source', 'origin', 'title', 'description', 'content','id', 'author_id',
+         'contentType', 'count','published', 'visibility', 'category', 'unlisted']
