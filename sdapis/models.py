@@ -62,7 +62,7 @@ class Post(models.Model):
     unlisted = models.BooleanField(default=False)
     
     def get_post_id(self):
-        return "{}/author/{}/posts/{}".format(HOST_NAME, self.author_id, str(self.id))
+        return "{}/api/author/{}/posts/{}".format(HOST_NAME, self.author_id, str(self.id))
 
     def get_type(self):
         return "post"
@@ -80,7 +80,7 @@ class Comment(models.Model):
     # return settings.HOST_URL + "author/" + self.authorID
 
     def get_comment_id(self):
-        return "{}author/{}/posts/{}/comments/{}".format(HOST_NAME, self.comment_author.author_id, str(self.post_of_comment.post_id),str(self.comment_id))
+        return "{}/api/author/{}/posts/{}/comments/{}".format(HOST_NAME, self.comment_author.author_id, str(self.post_of_comment.post_id),str(self.comment_id))
 
     def get_type(self):
         return "comment"
