@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.fields import CharField
+from django.contrib.postgres.fields import ArrayField
 from django.db.models.deletion import CASCADE
 from django.conf import settings
 import uuid
@@ -31,24 +33,36 @@ class Author(AbstractUser):
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
-    post_id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
-    source = models.URLField(max_length=200)
-    origin = models.URLField(max_length=200)
+    id = models.CharField(primary_key=True, default=uuid_hex, unique=True, max_length=100)
+
+    source = models.URLField(max_length=200, null=True)
+    origin = models.URLField(max_length=200, null=True)
     description = models.TextField(default= "description of the post")
     contentType = models.CharField(max_length=20, default="text/plain")
     content = models.TextField()
     # author 1 <-> * post
-    post_author = models.ForeignKey(Author, on_delete=CASCADE)
+    author_id = models.CharField(max_length=100, default="no author")
+    comment_list = ArrayField(models.JSONField(), default=list)
+
+    PUBLIC = 'PUBLIC'
+    FRIENDS = 'FRIEND'
+
+    STATUS_CHOICES = [
+        (PUBLIC, 'public'),
+        (FRIENDS, 'friend'),
+    ]
+    visibility = models.CharField(choices=STATUS_CHOICES, default=PUBLIC, max_length=6)
+    category = CharField(max_length=200, default="Web Tutorial")
     
     #category will be added in the next part!
     #visibility will be adde in the next part!
 
+    count = models.IntegerField(default=0)
     published = models.DateTimeField(auto_now_add=True)
     unlisted = models.BooleanField(default=False)
-
-
+    
     def get_post_id(self):
-        return "{}author/{}/posts/{}".format(HOST_NAME, self.post_author.author_id, str(self.post_id))
+        return "{}/author/{}/posts/{}".format(HOST_NAME, self.author_id, str(self.id))
 
     def get_type(self):
         return "post"
@@ -57,11 +71,11 @@ class Comment(models.Model):
     comment = models.TextField()
     contentType = models.CharField(max_length=20, default="text/plain")
     published = models.DateTimeField(auto_now_add=True)
-    comment_id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
+    comment_id = models.UUIDField(primary_key=True, default=uuid_hex, unique=True)
     # author 1 <-> * comment
     comment_author = models.ForeignKey(Author, on_delete=CASCADE)
     # post 1 <-> * comment
-    post_of_comment = models.ForeignKey(Post, on_delete=CASCADE)
+    post = models.ForeignKey(Post, on_delete=CASCADE)
     # def get_id(self):
     # return settings.HOST_URL + "author/" + self.authorID
 
@@ -75,6 +89,16 @@ class Follow(models.Model):
     # author2 follows author1
     author1 = models.CharField(max_length=50)
     author2 = models.CharField(max_length=50)
+
+class Inbox(models.Model):
+    author_id = models.CharField(max_length=40, unique=True)
+    items = ArrayField(models.JSONField(), default=list) # array of objects
+
+    def get_author(self):
+        return settings.HOST_NAME + "author/" + self.author_id
+
+    def get_type(self):
+        return "inbox"
 
 class Node(models.Model):
     host = models.CharField(max_length=150)

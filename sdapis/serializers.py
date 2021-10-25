@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from django.utils import timezone
+from tzlocal import get_localzone
 from .models import *
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -17,6 +19,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         author.save()
         return author
 
+
 class AuthorSerializer(serializers.ModelSerializer):
     type = serializers.CharField(source='get_type', required=False)
     id = serializers.CharField(source='get_id', required=False)
@@ -28,13 +31,51 @@ class AuthorSerializer(serializers.ModelSerializer):
         model = Author
         fields = ['type', 'id', 'url', 'host', 'displayName', 'github', 'profile_image']
 
+
 class FollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Follow
         # author2 follows author1
         fields = ['author1', 'author2']
 
+
 class NodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Node
         fields = ['host']
+
+
+class InboxSerializer(serializers.ModelSerializer):
+    type = serializers.CharField(source='get_type', required=False)
+    author = serializers.CharField(source='get_author')
+
+    class Meta:
+        model = Inbox
+        fields = ['type', 'author', 'items']
+
+
+class PostSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(source='get_post_id', required=False, read_only=True)
+    type = serializers.CharField(source='get_type', required=False, read_only=True)
+    category = serializers.CharField(required=True)
+
+    def get_local_now():
+        local_tz = get_localzone()
+        timezone.activate(local_tz)
+        now = timezone.localtime(timezone.now())
+        return now
+
+    publushed = get_local_now()
+    
+    def to_representation(self, instance: Post):
+        response = super(PostSerializer, self).to_representation(instance)
+        author = Author.objects.get(author_id=instance.author_id)
+        author_serializer = AuthorSerializer(author)
+        response['author'] = author_serializer.data # add author data
+        return response
+
+    class Meta:
+        model = Post
+        #comments will be added later
+        fields = ['type', 'source', 'origin', 'title', 'description', 'content','id', 'author_id',
+         'contentType', 'count','published', 'visibility', 'category', 'unlisted']
