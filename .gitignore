@@ -115,3 +115,7 @@ GitHub.sublime-settings
 !.vscode/extensions.json 
 .history
 .DS_Store
+
+#react
+node_modules
+package-lock.json
