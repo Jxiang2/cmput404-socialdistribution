@@ -1,12 +1,10 @@
 from django.db import models
-from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
+from django.db.models.fields import CharField
 from django.contrib.postgres.fields import ArrayField
 from django.db.models.deletion import CASCADE
 from django.conf import settings
 import uuid
-
-from django.db.models.fields import CharField
 
 
 HOST_NAME = settings.HOST_NAME

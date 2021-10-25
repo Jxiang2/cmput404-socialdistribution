@@ -26,7 +26,7 @@ urlpatterns = [
     # inbox
     path('api/author/<str:author_id>/inbox/', inbox_view.inbox_detail),
     # friends
-    path('api/author/<str:authorID>/friends/', inbox_view.friend),
+    path('api/author/<str:author_id>/friends/', inbox_view.friend),
 
 
 

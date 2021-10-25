@@ -7,7 +7,8 @@ from rest_framework import status
 from sdapis.models import Author
 from sdapis.serializers import RegistrationSerializer, AuthorSerializer
 from sdapis.permissions import AccessPermission, CustomAuthentication
-from sdapis.views.helper import is_valid_node
+from sdapis.pagination import AuthorPagination
+from .node_helper import is_valid_node
 
 
 @api_view(['POST'])
@@ -18,16 +19,15 @@ def register(request):
     if not valid:
         return Response({"message" : "not a valid node"}, status=status.HTTP_403_FORBIDDEN)
 
+    # register an account
+    if Author.objects.filter(email=request.data["email"]).exists():
+        return Response({'message' : "email already exists"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+    serializer = RegistrationSerializer(data=request.data)
+    if serializer.is_valid(): # make sure data match the model
+        author = serializer.save()
+        return Response({"message" : "success, please login"}, status=status.HTTP_201_CREATED)
     else:
-        # register an account
-        if Author.objects.filter(email=request.data["email"]).exists():
-            return Response({'message' : "email already exists"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-        serializer = RegistrationSerializer(data=request.data)
-        if serializer.is_valid(): # make sure data match the model
-            author = serializer.save()
-            return Response({"message" : "success, please login"}, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @authentication_classes([CustomAuthentication])
@@ -39,13 +39,11 @@ def author_list(request):
 
     if request.method == "GET":
         # get all authors sort by display name
+        paginator = AuthorPagination()
         authors = Author.objects.filter(~Q(email="c404t21@admin.com")).order_by('username')
-        serializer = AuthorSerializer(authors, many=True)
-        custom_data = {
-            "type": "authors",
-            "items": serializer.data
-        }
-        return Response(custom_data)
+        paginated = paginator.paginate_queryset(authors, request)
+        serializer = AuthorSerializer(paginated, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
 @api_view(['GET', 'POST'])
 @authentication_classes([CustomAuthentication])

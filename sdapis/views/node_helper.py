@@ -1,6 +1,4 @@
-from sdapis.models import Node
-from sdapis.serializers import NodeSerializer
-import requests
+#nothing to impoer now
 
 def is_valid_node(request):
     host = request.build_absolute_uri("/")

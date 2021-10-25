@@ -19,6 +19,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         author.save()
         return author
 
+
 class AuthorSerializer(serializers.ModelSerializer):
     type = serializers.CharField(source='get_type', required=False)
     id = serializers.CharField(source='get_id', required=False)
@@ -30,16 +31,19 @@ class AuthorSerializer(serializers.ModelSerializer):
         model = Author
         fields = ['type', 'id', 'url', 'host', 'displayName', 'github', 'profile_image']
 
+
 class FollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Follow
         # author2 follows author1
         fields = ['author1', 'author2']
 
+
 class NodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Node
         fields = ['host']
+
 
 class InboxSerializer(serializers.ModelSerializer):
     type = serializers.CharField(source='get_type', required=False)
@@ -49,13 +53,12 @@ class InboxSerializer(serializers.ModelSerializer):
         model = Inbox
         fields = ['type', 'author', 'items']
 
+
 class PostSerializer(serializers.ModelSerializer):
     id = serializers.CharField(source='get_post_id', required=False, read_only=True)
     type = serializers.CharField(source='get_type', required=False, read_only=True)
     category = serializers.CharField(required=True)
-    #comments = serializers.URLField(source='get_comments_url', required=False)
 
-    
     def get_local_now():
         local_tz = get_localzone()
         timezone.activate(local_tz)
@@ -70,8 +73,6 @@ class PostSerializer(serializers.ModelSerializer):
         author_serializer = AuthorSerializer(author)
         response['author'] = author_serializer.data # add author data
         return response
-
-
 
     class Meta:
         model = Post
