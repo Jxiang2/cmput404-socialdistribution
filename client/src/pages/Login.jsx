@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {connect} from "react-redux";
 import axios from "axios";
 import {setCurrentUser} from "../redux/user/actions"
+import "../styles/Login.css";
 
 
 class Login extends Component {
@@ -29,6 +30,7 @@ class Login extends Component {
             
         } catch (e) {
             console.log(e);
+            alert("invalid data!")
         }
     }
 
@@ -38,13 +40,13 @@ class Login extends Component {
 
     render() {
         return (
-            <div>
+            <div id="login-page">
+                <h1>CMPUT404 Social Distribution</h1>
                 <i className="fas fa-envelope-open-text"></i>
                 <input type="email" id="login-email" placeholder='your email' value={this.state.email} onChange={(e)=> this.setState({email:e.target.value})} />
                 <i className="fas fa-key"></i>
                 <input type="password" id="login-pwd" placeholder='your passowrd' value={this.state.password} onChange={(e)=> this.setState({password:e.target.value})} />
-                <br/>
-                <button id="login-button" onClick={this.handelLogin}>submit</button>
+                <button id="login-btn" onClick={this.handelLogin}>Login</button>
                 <p>{this.state.id}</p>
             </div>
         )
