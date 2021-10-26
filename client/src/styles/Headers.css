@@ -1,0 +1,65 @@
+#user-header {
+  height: 300px;
+  width: 98%;
+  margin: 5px auto;
+  background: #F5F5F5;
+  border: 1px #D3D3D3 solid;
+}
+
+#user-header h1 {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+#user-header hr {
+  width: 96%;
+  margin: 0 auto;
+}
+
+#user-header #user-avatar {
+  float: left;
+  margin: 20px 30px;
+  height: 120px;
+  width: 120px;
+  color: #F5F5F5;
+  background: #6495ED;
+  font-size: 50px;
+}
+
+#user-header #user-info {
+  float: right;
+  margin: 60px 40px;
+  margin-right: 100px;
+}
+
+#no-user-header {
+  height: 250px;
+  width: 98%;
+  margin: 5px auto;
+  background: #F5F5F5;
+  border: 1px #D3D3D3 solid;
+}
+
+#no-user-header h1 {
+  margin-left: 30px;
+  margin-bottom: 20px;
+}
+
+#no-user-header hr {
+  width: 96%;
+  margin: 0 auto;
+}
+
+#no-user-header #empty-avatar {
+  float: left;
+  margin: 20px 30px;
+  background-color: #C0C0C0;
+  height: 120px;
+  width: 120px;
+  border-radius: 50%;
+}
+
+#no-user-message {
+  margin: 60px 40px;
+  float: right;
+}
