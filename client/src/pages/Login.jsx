@@ -9,8 +9,7 @@ class Login extends Component {
 
     state ={
         email:'',
-        password:'',
-        id:''
+        password:''
     }
 
     handelLogin = async () => {
@@ -23,10 +22,13 @@ class Login extends Component {
                 }
             });
             console.log(res);
-            this.props.setCurrentUser(res.data);
+            this.props.setCurrentUser(res.data.authorID);
             console.log('redux store:',this.props.authorID);
             // with mapStateToProps, I can pull from redux
-            this.setState({id:this.props.authorID.authorID});
+            // this.setState({id:this.props.authorID.authorID});
+
+            window.location = '/home';
+
             
         } catch (e) {
             console.log(e);
