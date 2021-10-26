@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import axios from "axios";
 import UserHeader from '../components/UserHeader';
 import PostItem from '../components/PostItem';
+import PostForm from '../components/PostForm';
 import LogOutButton from '../components/LogOutButton';
 
 class HomePage extends Component {
@@ -102,8 +103,10 @@ class HomePage extends Component {
                             <PostItem post={p} key={i} handlePostView={this.handlePostView} />
                         )
                         : "No posts"
-                }
+                    }
                 </div>
+
+                <PostForm/>
             </>
         )
     }
