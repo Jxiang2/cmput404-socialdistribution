@@ -44,7 +44,7 @@ class PostItem extends Component {
 
     let resId = tmp_post_id[tmp_post_id.length - 1];
     if (login_author_id !== post_author_id) {
-      window.alert("you cannot delete this post")
+      window.alert("you cannot delete this post" + "you: " + login_author_id + "author:" + post_author_id)
     } else {
       try {
         const res = await axios.delete(`api/author/${post_author_id}/posts/${resId}/`, { 

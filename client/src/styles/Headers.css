@@ -34,3 +34,12 @@
   margin-left: 50px;
   margin-top: 0px;
 }
+
+#nav-bar {
+  text-align: center;
+}
+
+#nav-bar a {
+  padding-left: 5%;
+  padding-right: 5%;
+}
