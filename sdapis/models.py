@@ -46,12 +46,14 @@ class Post(models.Model):
 
     PUBLIC = 'PUBLIC'
     FRIENDS = 'FRIEND'
+    PRIVATE = 'PRIVATE'
 
     STATUS_CHOICES = [
         (PUBLIC, 'public'),
         (FRIENDS, 'friend'),
+        (PRIVATE, 'private')
     ]
-    visibility = models.CharField(choices=STATUS_CHOICES, default=PUBLIC, max_length=6)
+    visibility = models.CharField(choices=STATUS_CHOICES, default=PUBLIC, max_length=7)
     category = CharField(max_length=200, default="Web Tutorial")
     
     #category will be added in the next part!
