@@ -1,5 +1,5 @@
 #user-header {
-  height: 300px;
+  height: 200px;
   width: 98%;
   margin: 5px auto;
   background: gray;
@@ -21,9 +21,9 @@
 #user-header #user-avatar {
   float: left;
   margin-left: 30px;
-  margin-top: 60px;
-  height: 120px;
-  width: 120px;
+  margin-top: 20px;
+  height: 50px;
+  width: 50px;
   color: #F5F5F5;
   background: #6495ED;
   font-size: 50px;
@@ -32,5 +32,5 @@
 #user-header #user-info {
   float: left;
   margin-left: 50px;
-  margin-top: 60px;
+  margin-top: 0px;
 }

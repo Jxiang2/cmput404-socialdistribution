@@ -22,7 +22,6 @@ class HomePage extends Component {
         });
 
         await this.handlePostView();
-
         this.setState({currentUser: res.data});
     }
 
@@ -102,18 +101,19 @@ class HomePage extends Component {
                         this.state.publicPosts.map((p, i) => 
                             <PostItem post={p} key={i} handlePostView={this.handlePostView} />
                         )
-                        : "No posts"
+                        : <h1 style={{display:"flex", justifyContent:"center"}}>No Posts</h1>
                     }
                 </div>
-
-                <PostForm/>
+                <div>
+                    <PostForm handlePostView={this.handlePostView}/>
+                </div>
             </>
         )
     }
 }
 
+// write to redux
 const mapStateToProps = (state) => ({
     authorID: state.user.authorID
 })
-
 export default connect(mapStateToProps)(HomePage);

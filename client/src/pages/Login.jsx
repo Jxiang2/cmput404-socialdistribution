@@ -49,7 +49,6 @@ class Login extends Component {
                 <i className="fas fa-key"></i>
                 <input type="password" id="login-pwd" placeholder='your passowrd' value={this.state.password} onChange={(e)=> this.setState({password:e.target.value})} />
                 <button id="login-btn" onClick={this.handelLogin}>Login</button>
-                <p>{this.state.id}</p>
             </div>
         )
     }

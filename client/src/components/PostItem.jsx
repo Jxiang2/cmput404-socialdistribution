@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import { Button } from "@material-ui/core"
 import ReactMarkDown from "react-markdown";
+import '../styles/PostItem.css'
 
 // This component is used to display the Post
 class PostItem extends Component {
@@ -15,13 +16,14 @@ class PostItem extends Component {
     content: "",
     visibility: "",
     unlisted: false,
-    showComments: false,
-    showEditForm: false,
   }
 
   renderPostContent = () => {
     const { contentType } = this.props.post;
-    switch (contentType) {
+    const { visibility } = this.props.post;
+    // console.log(this.props.post)
+    if (visibility === "PUBLIC") {
+      switch (contentType) {
       case "text/markdown":
         return <ReactMarkDown>{this.props.post.content}</ReactMarkDown>;
       case "image/png;base64":
@@ -29,17 +31,8 @@ class PostItem extends Component {
         return <div><img className="imagePreview" src={this.props.post.content} alt="Unavailable" /></div>
       default:
         return <p>{this.props.post.content}</p>
+      }
     }
-  }
-
-  ShowEdit = () => {
-    const { showEditForm } = this.state;
-    this.setState({ showEditForm: !showEditForm });
-  }
-
-  handleShowComments = () => {
-    const { showComments } = this.state;
-    this.setState({ showComments: !showComments })
   }
 
 
@@ -64,35 +57,21 @@ class PostItem extends Component {
             this.props.handlePostView();
         }
       } catch (err) {
-        console.log(err.response.status)
+        // console.log(err.response.status)
       }
     }
   }
 
   render() {
-    
-  
-
     return (
       <div style={{ border: "solid 1px grey" }}>
-        <h1>Title: {this.props.post.title}</h1>
-        <h2>{this.props.post.author.displayName}</h2>
-        <h2>Description: {this.props.post.description}</h2>
-        <p>{this.renderPostContent()}</p>
-        {/* <Button color="primary" variant="outlined" style={{ margin: 5 }} onClick={this.ShowEdit}>edit post</Button> */}
-        {/* <Button color="primary" variant="outlined" style={{ margin: 5 }} onClick={this.handleShowComments}>{this.state.showComments ? "Close" : "Show Comments"}</Button> */}
-        <Button color="primary" variant="outlined" style={{ margin: 5 }} onClick={this.deletepostClick}>Delete</Button>
-        <br />
-        {
-          this.state.showComments ?
-            "show comments"
-            :
-            "not show comments"
-        }
-        {/* {
-          this.state.showEditForm ? <PostEditForm postID={this.props.post.postID} /> : null
-        } */}
-
+        <h1>{this.props.post.title}</h1>
+        <h3>{this.props.post.author.displayName}</h3>
+        <h3>description: {this.props.post.description}</h3>
+        <p id="post-text">{this.renderPostContent()}</p>
+        <Button style={{color:"black", backgroundColor:"grey"}} 
+        onClick={this.deletepostClick}>Delete</Button>
+        <br/>
       </div>
     )
   }
@@ -101,6 +80,5 @@ class PostItem extends Component {
 const mapStateToProps = (state) => ({
   authorID: state.user.authorID
 })
-
 
 export default connect(mapStateToProps)(PostItem);
