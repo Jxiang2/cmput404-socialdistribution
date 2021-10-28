@@ -88,7 +88,7 @@ class PostForm extends Component {
                 let tmp_author_id = author.id.split("/");
                 let rcver_id = tmp_author_id[tmp_author_id.length - 1];
                 console.log(rcver_id)
-                if (rcver_id != this.props.authorID)
+                if (rcver_id !== this.props.authorID)
                     axios.post(`api/author/${rcver_id}/inbox/`, data, { auth: { username: "socialdistribution_t21", password: "c404t21" } });
             }
         }
@@ -96,16 +96,16 @@ class PostForm extends Component {
   }
 
   handlePost = async () => {
-    const { title, source, origin, description, category, visibility, unlisted } = this.state;
+    const { title, description, category, visibility, unlisted } = this.state;
     const { authorID } = this.props;
 
     if (this.state.contentType === "image") {
       // convert image to base 64
       var base64String = await this.getBase64(this.state.img);
-      var contentType = base64String.slice(5).split(",")[0];
+      // var contentType = base64String.slice(5).split(",")[0];
       var content = base64String;
     } else {
-      var contentType = this.state.contentType;
+      // var contentType = this.state.contentType;
       var content = this.state.content;
     }
 

@@ -13,8 +13,9 @@ class HomePage extends Component {
     }
 
     componentDidMount = async () => {
+        console.log(this.props.authorID);
         // retrieve authorID form redux
-        const res = await axios.get(`/api/author/${this.props.authorID}`, {
+        const res = await axios.get(`/api/author/${this.props.authorID}/`, {
             auth: {
                 username: "socialdistribution_t21",
                 password: "c404t21"
@@ -44,7 +45,8 @@ class HomePage extends Component {
         }   
     }
 
-    refreshInbox = async () => {
+    // get the inbox content
+    showInbox = async () => {
         if (this.props.authorID !== null) {
             try {
             const res = await axios.get(`/api/author/${this.props.authorID}/inbox/`, {
@@ -61,6 +63,7 @@ class HomePage extends Component {
         }
     }
 
+    // clear the inbox content
     clearInbox = async () => {
         if (this.props.authorID !== null) {
             try {

@@ -14,7 +14,7 @@ class LogOutButton extends Component {
 
     render() {
         return (
-            <div style={{ display:'flex', justifyContent:'right', height:20}}>
+            <div style={{ display:'flex', justifyContent:'flex-end', height:20}}>
                 <Button onClick={this.handleLogout}>Log out</Button>
             </div>
         )
