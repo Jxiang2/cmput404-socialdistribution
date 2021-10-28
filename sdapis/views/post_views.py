@@ -14,7 +14,7 @@ HOST_NAME = settings.HOST_NAME
 @api_view(['GET'])
 @authentication_classes([CustomAuthentication])
 @permission_classes([AccessPermission])
-def public_post_view(request):
+def all_post_view(request):
     valid = is_valid_node(request)
     if not valid:
         return Response({"message":"not a valid node"}, status=status.HTTP_403_FORBIDDEN)
@@ -22,7 +22,7 @@ def public_post_view(request):
     if request.method == "GET":
         # get recent posts of author (paginated)
         paginator = PostPagination()
-        posts = Post.objects.all()
+        posts = Post.objects.filter()
         paginated = paginator.paginate_queryset(posts, request)
         serializer = PostSerializer(paginated, many=True)
         return paginator.get_paginated_response(serializer.data)

@@ -20,7 +20,7 @@ urlpatterns = [
     path('api/author/<str:author_id>/followers/<str:author_id2>/', follow_views.follower),
 
     # post/ post-detail
-    path('api/posts/', post_views.public_post_view),
+    path('api/posts/', post_views.all_post_view),
     path('api/author/<str:author_id>/posts/', post_views.post_view),
     path('api/author/<str:author_id>/posts/<str:post_id>/', post_views.post_detail_view),
 

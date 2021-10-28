@@ -13,7 +13,7 @@ class PostForm extends Component {
       source: "",
       origin: "",
       description: "",
-      contentType: "text/markdown",
+      contentType: "text/plain",
       category: "WEB TUTORIAL",
       content: "",
       visibility: "PUBLIC",
@@ -102,10 +102,11 @@ class PostForm extends Component {
     if (this.state.contentType === "image") {
       // convert image to base 64
       var base64String = await this.getBase64(this.state.img);
-      // var contentType = base64String.slice(5).split(",")[0];
+      var contentType = base64String.slice(5).split(",")[0];
       var content = base64String;
     } else {
-      // var contentType = this.state.contentType;
+      var contentType = this.state.contentType;
+      console.log(contentType)
       var content = this.state.content;
     }
 
@@ -114,7 +115,7 @@ class PostForm extends Component {
         // console.log(authorID)
         // console.log( title, source, origin, description, contentType, category, content, visibility, unlisted );
         var res = await axios.post(`api/author/${authorID}/posts/`, 
-        { title, description, content, category}, 
+        { title, description, content, category, visibility, unlisted, contentType}, 
         { auth: { username: "socialdistribution_t21", password: "c404t21" } });
 
         this.props.handlePostView()
@@ -126,7 +127,7 @@ class PostForm extends Component {
           this.sendPost(authorID, resId, visibility);
         }
         else {
-          let msg = "Remember this route! You will not see this again! /post/unlisted/" + resId;
+          let msg = "this is the unlisted ID:" + resId;
           alert(msg);
         }
 
