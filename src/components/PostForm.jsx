@@ -10,10 +10,8 @@ class PostForm extends Component {
     this.state = {
       show: false,
       title: "",
-      source: "",
-      origin: "",
       description: "",
-      contentType: "text/markdown",
+      contentType: "text/plain",
       category: "WEB TUTORIAL",
       content: "",
       visibility: "PUBLIC",
@@ -54,7 +52,7 @@ class PostForm extends Component {
 
   handleShow = () => {
     const { show } = this.state;
-    this.setState({ show: !show });
+    this.setState({ show: !show, visibility: "PUBLIC",description: "",title:"",content: "", unlisted: false, imagePreview:null, img:null});
   }
 
   sendPost = async (authorID, postID, visibility) => {
@@ -102,10 +100,11 @@ class PostForm extends Component {
     if (this.state.contentType === "image") {
       // convert image to base 64
       var base64String = await this.getBase64(this.state.img);
-      // var contentType = base64String.slice(5).split(",")[0];
+      var contentType = base64String.slice(5).split(",")[0];
       var content = base64String;
     } else {
-      // var contentType = this.state.contentType;
+      var contentType = this.state.contentType;
+      console.log(contentType)
       var content = this.state.content;
     }
 
@@ -114,11 +113,12 @@ class PostForm extends Component {
         // console.log(authorID)
         // console.log( title, source, origin, description, contentType, category, content, visibility, unlisted );
         var res = await axios.post(`api/author/${authorID}/posts/`, 
-        { title, description, content, category}, 
+        { title, description, content, category, visibility, unlisted, contentType}, 
         { auth: { username: "socialdistribution_t21", password: "c404t21" } });
 
         this.props.handlePostView()
-        this.setState({ show: false });
+        // reset post form 
+        this.setState({ show: false, visibility: "PUBLIC",description: "",title:"",content: "", unlisted: false, contentType: "text/plain",});
         let tmp_post_id = res.data.id.split("/");
         let resId = tmp_post_id[tmp_post_id.length - 1];
         // console.log("postID:", resId);
@@ -126,7 +126,7 @@ class PostForm extends Component {
           this.sendPost(authorID, resId, visibility);
         }
         else {
-          let msg = "Remember this route! You will not see this again! /post/unlisted/" + resId;
+          let msg = "this is the unlisted ID:" + resId;
           alert(msg);
         }
 
@@ -208,6 +208,7 @@ class PostForm extends Component {
                       <option value="FRIEND">FRIEND</option>
                       <option value="PRIVATE">PRIVATE</option>
                     </select>
+                    <p>{this.state.visibility}</p>
                     <label>Unlisted:</label>
                     <input type="checkbox" checked={unlisted} onChange={(e) => this.setState({ unlisted: e.target.checked })} />
                     {

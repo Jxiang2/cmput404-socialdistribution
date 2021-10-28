@@ -35,8 +35,10 @@ class HomePage extends Component {
                     password: "c404t21"
                     } 
             });
-            
-            this.setState({publicPosts: res.data.posts});
+            console.log(res.data.posts);
+            this.setState({publicPosts: res.data.posts.filter((post)=>{
+                return post.visibility === "PUBLIC";
+            })});
         } catch (e) {
             console.log(e);
             }   
