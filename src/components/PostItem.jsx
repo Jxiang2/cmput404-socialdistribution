@@ -68,19 +68,6 @@ class PostItem extends Component {
 
   render() {
 
-    var login_id = this.props.post.author.authorID;
-    var author_id = this.props.authorID.authorID;
-
-    if (this.props.post.visibility === "FRIEND") {
-      if (login_id === author_id) {
-        var visible = true;
-      } else {
-        var visible = false;
-      }
-    } else {
-      var visible = true;
-    }
-
     return (
       <div style={{ border: "solid 1px grey" }}>
         <h1>{this.props.post.title}</h1>

@@ -10,8 +10,6 @@ class PostForm extends Component {
     this.state = {
       show: false,
       title: "",
-      source: "",
-      origin: "",
       description: "",
       contentType: "text/plain",
       category: "WEB TUTORIAL",
@@ -54,7 +52,7 @@ class PostForm extends Component {
 
   handleShow = () => {
     const { show } = this.state;
-    this.setState({ show: !show });
+    this.setState({ show: !show, visibility: "PUBLIC",description: "",title:"",content: "", unlisted: false, imagePreview:null, img:null});
   }
 
   sendPost = async (authorID, postID, visibility) => {
@@ -119,7 +117,8 @@ class PostForm extends Component {
         { auth: { username: "socialdistribution_t21", password: "c404t21" } });
 
         this.props.handlePostView()
-        this.setState({ show: false });
+        // reset post form 
+        this.setState({ show: false, visibility: "PUBLIC",description: "",title:"",content: "", unlisted: false, contentType: "text/plain",});
         let tmp_post_id = res.data.id.split("/");
         let resId = tmp_post_id[tmp_post_id.length - 1];
         // console.log("postID:", resId);
@@ -209,6 +208,7 @@ class PostForm extends Component {
                       <option value="FRIEND">FRIEND</option>
                       <option value="PRIVATE">PRIVATE</option>
                     </select>
+                    <p>{this.state.visibility}</p>
                     <label>Unlisted:</label>
                     <input type="checkbox" checked={unlisted} onChange={(e) => this.setState({ unlisted: e.target.checked })} />
                     {
