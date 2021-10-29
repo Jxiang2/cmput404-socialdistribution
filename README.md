@@ -1,7 +1,20 @@
 # cmput404-socialdistribution
 
-Reference: 
+## Deployed Site:
+https://c404project.herokuapp.com
 
+## API Documentations:
+https://c404project.herokuapp.com/docs/
+
+## Run Frontend
+npm install
+npm start
+
+## Run Backend
+pip install -r requirements.txt
+python manage.py runserver
+
+## Reference: 
 1. Pagination: https://www.django-rest-framework.org/api-guide/pagination/
 2. Server Authentication & Permission: consulted haonan zhang, hz6
 3. Node Setup: consulted haonan zhang, hz6
