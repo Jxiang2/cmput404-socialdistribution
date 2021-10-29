@@ -1,0 +1,28 @@
+#register-page h1 {
+    text-align: center;
+    margin: 50px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+
+  #register-page i {
+    width: 60%;
+    height: 15px;
+    display: block;
+    margin: 20px auto;
+  }
+  
+  #register-page input {
+    width: 60%;
+    height: 25px;
+    display: block;
+    margin: 20px auto;
+    border: 1px solid blue;
+    border-radius: 2px;
+  }
+  
+  #register-btn {
+    display: block;
+    margin: 30px auto;
+    padding-left: 30px;
+    padding-right: 30px;
+  }

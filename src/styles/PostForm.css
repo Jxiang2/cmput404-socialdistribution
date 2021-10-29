@@ -1,0 +1,11 @@
+#post-form {
+    width: 100%;
+    padding: 10px;
+    margin: 10px;
+    background: grey;
+  }
+  
+  .imagePreview {
+    height: 300px;
+    width: 500px;
+  }

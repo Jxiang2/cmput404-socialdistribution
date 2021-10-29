@@ -1,9 +1,8 @@
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.conf import settings
-from sdapis.permissions import AccessPermission, CustomAuthentication
 from sdapis.pagination import PostPagination
 from sdapis.serializers import PostSerializer
 from sdapis.models import Post, Author
@@ -11,10 +10,30 @@ from .node_helper import is_valid_node
 
 HOST_NAME = settings.HOST_NAME
 
+@api_view(['GET'])
+def all_post_view(request):
+    '''
+    get all posts, ordered by published time
+    '''
+    valid = is_valid_node(request)
+    if not valid:
+        return Response({"message":"not a valid node"}, status=status.HTTP_403_FORBIDDEN)
+
+    if request.method == "GET":
+        # get recent posts of author (paginated)
+        paginator = PostPagination()
+        posts = Post.objects.all().order_by('-published')
+        paginated = paginator.paginate_queryset(posts, request)
+        serializer = PostSerializer(paginated, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
+
 @api_view(['GET', 'POST'])
-@authentication_classes([CustomAuthentication])
-@permission_classes([AccessPermission])
 def post_view(request, author_id):
+    '''
+    get an author's all posts,
+    create a post
+    '''
     valid = is_valid_node(request)
     if not valid:
         return Response({"message":"not a valid node"}, status=status.HTTP_403_FORBIDDEN)
@@ -40,9 +59,10 @@ def post_view(request, author_id):
 
 
 @api_view(['GET','DELETE', 'PUT', 'POST'])
-@authentication_classes([CustomAuthentication])
-@permission_classes([AccessPermission])
 def post_detail_view(request, author_id, post_id):
+    '''
+    view a post's detail, delete a post(authenticated), forward a post, update a post(authenticated)
+    '''
     valid = is_valid_node(request)
     if not valid:
         return Response({"message":"not a valid node"}, status=status.HTTP_403_FORBIDDEN)

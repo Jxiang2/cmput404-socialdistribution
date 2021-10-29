@@ -1,0 +1,35 @@
+#user-header {
+  height: 200px;
+  width: 98%;
+  margin: 5px auto;
+  background: gray;
+}
+
+#user-header h1 {
+  text-align: center;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+#user-header hr {
+  width: 98%;
+  margin: auto;
+  color: black;
+}
+
+#user-header #user-avatar {
+  float: left;
+  margin-left: 30px;
+  margin-top: 30px;
+  height: 65px;
+  width: 65px;
+  color: #F5F5F5;
+  background: blue;
+  font-size: 50px;
+}
+
+#user-info {
+  float: left;
+  margin-left: 25px;
+  margin-top: 0px;
+}
