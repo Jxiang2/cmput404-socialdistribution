@@ -1,19 +1,16 @@
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from sdapis.models import Author
 from sdapis.serializers import RegistrationSerializer, AuthorSerializer
-from sdapis.permissions import AccessPermission, CustomAuthentication
 from sdapis.pagination import AuthorPagination
 from .node_helper import is_valid_node
 
 
 @api_view(['POST'])
-@authentication_classes([CustomAuthentication])
-@permission_classes([AccessPermission])
 def register(request):
     valid = is_valid_node(request)
     if not valid:
@@ -30,8 +27,6 @@ def register(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-@authentication_classes([CustomAuthentication])
-@permission_classes([AccessPermission])
 def author_list(request):
     valid = is_valid_node(request)
     if not valid:
@@ -46,8 +41,6 @@ def author_list(request):
         return paginator.get_paginated_response(serializer.data)
 
 @api_view(['GET', 'POST'])
-@authentication_classes([CustomAuthentication])
-@permission_classes([AccessPermission])
 def author_detail(request, author_id):
     valid = is_valid_node(request)
     if not valid:
@@ -81,8 +74,6 @@ def author_detail(request, author_id):
 #login
 #need to be refined!
 @api_view(['POST'])
-@authentication_classes([CustomAuthentication])
-@permission_classes([AccessPermission])
 def login_view(request):
     author = authenticate(request, email=request.data['email'], password=request.data['password'])
     print(author)

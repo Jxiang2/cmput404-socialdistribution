@@ -1,9 +1,8 @@
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.conf import settings
-from sdapis.permissions import AccessPermission, CustomAuthentication
 from sdapis.pagination import PostPagination
 from sdapis.serializers import PostSerializer
 from sdapis.models import Post, Author
@@ -12,8 +11,6 @@ from .node_helper import is_valid_node
 HOST_NAME = settings.HOST_NAME
 
 @api_view(['GET'])
-@authentication_classes([CustomAuthentication])
-@permission_classes([AccessPermission])
 def all_post_view(request):
     valid = is_valid_node(request)
     if not valid:
@@ -29,8 +26,6 @@ def all_post_view(request):
 
 
 @api_view(['GET', 'POST'])
-@authentication_classes([CustomAuthentication])
-@permission_classes([AccessPermission])
 def post_view(request, author_id):
     valid = is_valid_node(request)
     if not valid:
@@ -57,8 +52,6 @@ def post_view(request, author_id):
 
 
 @api_view(['GET','DELETE', 'PUT', 'POST'])
-@authentication_classes([CustomAuthentication])
-@permission_classes([AccessPermission])
 def post_detail_view(request, author_id, post_id):
     valid = is_valid_node(request)
     if not valid:

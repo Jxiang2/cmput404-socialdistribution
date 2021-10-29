@@ -60,21 +60,21 @@ class PostForm extends Component {
     
     // send to another author
     if (visibility === "PRIVATE") {
-        let res = await axios.get(`api/author/${this.state.privateToAuthor}/`, { auth: { username: "socialdistribution_t21", password: "c404t21"} });
+        let res = await axios.get(`api/author/${this.state.privateToAuthor}/`);
         // console.log(res.data)  
         let post_data = { "type": "post", "post_id": postID };
         let tmp_author_id = res.data.id.split("/");
         let rcver_id = tmp_author_id[tmp_author_id.length - 1];
-        axios.post(`api/author/${rcver_id}/inbox/`, post_data, { auth: { username: "socialdistribution_t21", password: "c404t21" } });
+        axios.post(`api/author/${rcver_id}/inbox/`, post_data);
     }
     else {
         // send to the public
         if (visibility === "PUBLIC") {
-          const res = await axios.get(`api/author/`, { auth: { username: "socialdistribution_t21", password: "c404t21" } });
+          const res = await axios.get(`api/author/`);
         
         } else if (visibility === "FRIEND") {
           // send to friends
-            var res = await axios.get(`api/author/${authorID}/friends/`, { auth: { username: "socialdistribution_t21", password: "c404t21" } });
+            var res = await axios.get(`api/author/${authorID}/friends/`);
             var authors = res.data.items;
         
             for (let author of authors) {
@@ -85,7 +85,7 @@ class PostForm extends Component {
                 let rcver_id = tmp_author_id[tmp_author_id.length - 1];
                 console.log(rcver_id)
                 if (rcver_id !== this.props.authorID)
-                    axios.post(`api/author/${rcver_id}/inbox/`, data, { auth: { username: "socialdistribution_t21", password: "c404t21" } });
+                    axios.post(`api/author/${rcver_id}/inbox/`, data);
             }
         }
     }
@@ -111,8 +111,7 @@ class PostForm extends Component {
         // console.log(authorID)
         // console.log( title, source, origin, description, contentType, category, content, visibility, unlisted );
         var res = await axios.post(`api/author/${authorID}/posts/`, 
-        { title, description, content, category, visibility, unlisted, contentType}, 
-        { auth: { username: "socialdistribution_t21", password: "c404t21" } });
+        { title, description, content, category, visibility, unlisted, contentType});
 
         this.props.handlePostView()
         // reset post form 
