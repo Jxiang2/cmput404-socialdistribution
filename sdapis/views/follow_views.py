@@ -5,6 +5,17 @@ from sdapis.models import Follow
 from .follow_helper import get_followers, get_followings
 from .node_helper import is_valid_node
 
+@api_view(['GET'])
+def following_list(request, author_id):
+    '''
+    get the list of authors that the current author is following
+    '''
+    valid = is_valid_node(request)
+    if not valid:
+        return Response({"message" : "not a valid node"}, status=status.HTTP_403_FORBIDDEN)
+
+    followings = get_followings(author_id)
+    return Response({"type" : "followings" , "items" : followings}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def follower_list(request, author_id):
@@ -58,15 +69,3 @@ def follower(request, author_id, author_id2):
             return Response({"message":"not a follower"}, status=status.HTTP_200_OK)
         follow.delete()
         return Response({"message":"success remove"}, status=status.HTTP_200_OK)
-
-@api_view(['GET'])
-def following_list(request, author_id):
-    '''
-    get the list of authors that the current author is following
-    '''
-    valid = is_valid_node(request)
-    if not valid:
-        return Response({"message" : "not a valid node"}, status=status.HTTP_403_FORBIDDEN)
-
-    followings = get_followings(author_id)
-    return Response({"type" : "followings" , "items" : followings}, status=status.HTTP_200_OK)
