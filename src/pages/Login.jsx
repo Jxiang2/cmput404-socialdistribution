@@ -22,11 +22,11 @@ class Login extends Component {
                 }
             });
             console.log(res);
+            // with mapDispatchToProps, I can write to redux
             this.props.setCurrentUser(res.data.authorID);
-            console.log('redux store:',this.props.authorID);
             // with mapStateToProps, I can pull from redux
-            // this.setState({id:this.props.authorID.authorID});
-
+            console.log('redux store:',this.props.authorID);
+            //redirect to homepage
             window.location = '/home';
 
             

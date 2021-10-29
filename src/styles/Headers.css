@@ -3,7 +3,6 @@
   width: 98%;
   margin: 5px auto;
   background: gray;
-  border: 1px grey;
 }
 
 #user-header h1 {
@@ -13,24 +12,24 @@
 }
 
 #user-header hr {
-  width: 96%;
-  margin: 0 auto;
+  width: 98%;
+  margin: auto;
   color: black;
 }
 
 #user-header #user-avatar {
   float: left;
   margin-left: 30px;
-  margin-top: 20px;
-  height: 50px;
-  width: 50px;
+  margin-top: 30px;
+  height: 65px;
+  width: 65px;
   color: #F5F5F5;
-  background: #6495ED;
+  background: blue;
   font-size: 50px;
 }
 
-#user-header #user-info {
+#user-info {
   float: left;
-  margin-left: 50px;
+  margin-left: 25px;
   margin-top: 0px;
 }
