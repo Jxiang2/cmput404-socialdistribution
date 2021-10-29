@@ -1,15 +1,12 @@
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from sdapis.models import Follow
-from sdapis.permissions import AccessPermission, CustomAuthentication
 from .follow_helper import get_followers, get_followings
 from .node_helper import is_valid_node
 
 
 @api_view(['GET'])
-@authentication_classes([CustomAuthentication])
-@permission_classes([AccessPermission])
 def follower_list(request, author_id): # GET: get a list of authors who are their followers
     valid = is_valid_node(request)
     if not valid:
@@ -21,8 +18,6 @@ def follower_list(request, author_id): # GET: get a list of authors who are thei
 
 
 @api_view(['GET', 'DELETE', 'PUT'])
-@authentication_classes([CustomAuthentication])
-@permission_classes([AccessPermission])
 def follower(request, author_id, author_id2):
     '''
     author_id2 follows author_id,
@@ -62,8 +57,6 @@ def follower(request, author_id, author_id2):
         return Response({"message":"success remove"}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-@authentication_classes([CustomAuthentication])
-@permission_classes([AccessPermission])
 def following_list(request, author_id):
     valid = is_valid_node(request)
     if not valid:

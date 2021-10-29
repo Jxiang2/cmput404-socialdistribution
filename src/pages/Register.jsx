@@ -17,12 +17,7 @@ class Register extends Component {
     handleRegister = async () => {
         const {email, username, github, password} = this.state;
         try {
-            const res = await axios.post("/api/register/", { email, username, github, password }, {
-                auth: {
-                username: "socialdistribution_t21",
-                password: "c404t21"
-                }
-            });
+            const res = await axios.post("/api/register/", { email, username, github, password });
             console.log(res)
 
             if (res.status === 201) {

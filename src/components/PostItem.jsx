@@ -38,11 +38,7 @@ class PostItem extends Component {
       window.alert("you cannot delete this post")
     } else {
       try {
-        const res = await axios.delete(`api/author/${post_author_id}/posts/${resId}/`, { 
-            auth:{
-             username: "socialdistribution_t21", 
-             password: "c404t21" } 
-            })
+        const res = await axios.delete(`api/author/${post_author_id}/posts/${resId}/`);
         if (res.status === 200) {
             // re-pull all posts from backend
             this.props.handlePostView();

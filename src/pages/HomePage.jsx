@@ -15,12 +15,7 @@ class HomePage extends Component {
     componentDidMount = async () => {
         console.log(this.props.authorID);
         // retrieve authorID form redux
-        const res = await axios.get(`/api/author/${this.props.authorID}/`, {
-            auth: {
-                username: "socialdistribution_t21",
-                password: "c404t21"
-                }
-        });
+        const res = await axios.get(`/api/author/${this.props.authorID}/`);
 
         await this.handlePostView();
         this.setState({currentUser: res.data});
@@ -29,12 +24,7 @@ class HomePage extends Component {
     handlePostView = async () => {
         if (this.props.authorID !== null) {
             try {
-            const res = await axios.get("/api/posts/", {
-                auth: {
-                    username: "socialdistribution_t21",
-                    password: "c404t21"
-                    } 
-            });
+            const res = await axios.get("/api/posts/");
             console.log(res.data.posts);
             this.setState({publicPosts: res.data.posts.filter((post)=>{
                 // only show the public posts
@@ -52,12 +42,7 @@ class HomePage extends Component {
     showInbox = async () => {
         if (this.props.authorID !== null) {
             try {
-            const res = await axios.get(`/api/author/${this.props.authorID}/inbox/`, {
-                auth: {
-                    username: "socialdistribution_t21",
-                    password: "c404t21"
-                    }
-            });
+            const res = await axios.get(`/api/author/${this.props.authorID}/inbox/`);
             } catch (e) {
                 console.log(e);
             }
@@ -70,12 +55,7 @@ class HomePage extends Component {
     clearInbox = async () => {
         if (this.props.authorID !== null) {
             try {
-                const res = await axios.delete(`/api/author/${this.props.authorID}/inbox/`, {
-                    auth: {
-                        username: "socialdistribution_t21",
-                        password: "c404t21"
-                    }
-                });
+                const res = await axios.delete(`/api/author/${this.props.authorID}/inbox/`);
             } catch (e) {
                 console.log(e)
             }

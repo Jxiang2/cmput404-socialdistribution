@@ -1,8 +1,7 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from sdapis.permissions import AccessPermission, CustomAuthentication
 from sdapis.models import Author, Follow, Inbox, Post
 from .follow_helper import get_followers
 from .node_helper import is_valid_node
@@ -11,8 +10,6 @@ from sdapis.serializers import *
 
 
 @api_view(['GET', 'POST', 'DELETE'])
-@authentication_classes([CustomAuthentication])
-@permission_classes([AccessPermission])
 def inbox_detail(request, author_id):
     valid = is_valid_node(request)
     if not valid:
@@ -85,8 +82,6 @@ def inbox_detail(request, author_id):
 
 
 @api_view(['GET'])
-@authentication_classes([CustomAuthentication])
-@permission_classes([AccessPermission])
 def friend(request, author_id):
     valid = is_valid_node(request)
     if not valid:

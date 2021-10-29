@@ -15,12 +15,7 @@ class Login extends Component {
     handelLogin = async () => {
         const {email, password} = this.state;
         try {
-            const res = await axios.post("/api/login/", { email, password }, {
-                auth: {
-                username: "socialdistribution_t21",
-                password: "c404t21"
-                }
-            });
+            const res = await axios.post("/api/login/", { email, password });
             console.log(res);
             // with mapDispatchToProps, I can write to redux
             this.props.setCurrentUser(res.data.authorID);
