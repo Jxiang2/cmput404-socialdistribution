@@ -78,11 +78,8 @@ def post_detail_view(request, author_id, post_id):
             del_post = get_object_or_404(Post, id=post_id)
         except Post.DoesNotExist:
             return Response(status = status.HTTP_404_NOT_FOUND)
-        operation = del_post.delete()
-        if operation:
-            return Response({'message': "delete successful!"}, status=status.HTTP_200_OK)
-        else:
-            return Response({'message':"delete was unsuccessful"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        del_post.delete()
+        return Response({'message': "delete successful!"}, status=status.HTTP_200_OK)
 
     elif request.method == "PUT":
         # create a new post with the given id

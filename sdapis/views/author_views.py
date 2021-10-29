@@ -29,6 +29,20 @@ def register(request):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+#login
+#need to be refined!
+@api_view(['POST'])
+def login_view(request):
+    '''
+    author login, return the authors' id
+    '''
+    author = authenticate(request, email=request.data['email'], password=request.data['password'])
+    print(author)
+    if author is not None:
+        return Response({'authorID':author.author_id}, status=status.HTTP_200_OK)
+    else:
+        return Response({'message':"incorrect email or password"}, status=status.HTTP_401_UNAUTHORIZED)
+
 @api_view(['GET'])
 def author_list(request):
     '''
@@ -80,17 +94,3 @@ def author_detail(request, author_id):
             serializer.save()
             return Response({"message" : "successful post"}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#login
-#need to be refined!
-@api_view(['POST'])
-def login_view(request):
-    '''
-    author login, return the authors' id
-    '''
-    author = authenticate(request, email=request.data['email'], password=request.data['password'])
-    print(author)
-    if author is not None:
-        return Response({'authorID':author.author_id}, status=status.HTTP_200_OK)
-    else:
-        return Response({'message':"incorrect email or password"}, status=status.HTTP_401_UNAUTHORIZED)

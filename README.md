@@ -8,10 +8,12 @@ https://c404project.herokuapp.com/docs/
 
 ## Run Frontend
 npm install
+
 npm start
 
 ## Run Backend
 pip install -r requirements.txt
+
 python manage.py runserver
 
 ## Reference: 
