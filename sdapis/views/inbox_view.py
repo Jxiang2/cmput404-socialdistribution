@@ -10,7 +10,11 @@ from sdapis.serializers import *
 
 
 @api_view(['GET', 'POST', 'DELETE'])
+
 def inbox_detail(request, author_id):
+    '''
+    check, update and clear an author's inbox
+    '''
     valid = is_valid_node(request)
     if not valid:
         return Response({"message":"not a valid node"}, status=status.HTTP_403_FORBIDDEN)
@@ -83,6 +87,9 @@ def inbox_detail(request, author_id):
 
 @api_view(['GET'])
 def friend(request, author_id):
+    '''
+    get the list of friends of an author
+    '''
     valid = is_valid_node(request)
     if not valid:
         return Response({"message":"not a valid node"}, status=status.HTTP_403_FORBIDDEN)

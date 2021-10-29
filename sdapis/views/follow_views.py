@@ -7,7 +7,10 @@ from .node_helper import is_valid_node
 
 
 @api_view(['GET'])
-def follower_list(request, author_id): # GET: get a list of authors who are their followers
+def follower_list(request, author_id):
+    '''
+    get the follower list of a current user
+    '''
     valid = is_valid_node(request)
     if not valid:
         return Response({"message":"not a valid node"}, status=status.HTTP_403_FORBIDDEN)
@@ -58,6 +61,9 @@ def follower(request, author_id, author_id2):
 
 @api_view(['GET'])
 def following_list(request, author_id):
+    '''
+    get the list of authors that the current author is following
+    '''
     valid = is_valid_node(request)
     if not valid:
         return Response({"message" : "not a valid node"}, status=status.HTTP_403_FORBIDDEN)

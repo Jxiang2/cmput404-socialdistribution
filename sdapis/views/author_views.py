@@ -12,6 +12,9 @@ from .node_helper import is_valid_node
 
 @api_view(['POST'])
 def register(request):
+    '''
+    author registration; parameters: username, email, password, github
+    '''
     valid = is_valid_node(request)
     if not valid:
         return Response({"message" : "not a valid node"}, status=status.HTTP_403_FORBIDDEN)
@@ -28,6 +31,9 @@ def register(request):
 
 @api_view(['GET'])
 def author_list(request):
+    '''
+    get the list of authors
+    '''
     valid = is_valid_node(request)
     if not valid:
         return Response({"message" : "not a valid node"}, status=status.HTTP_403_FORBIDDEN)
@@ -42,6 +48,10 @@ def author_list(request):
 
 @api_view(['GET', 'POST'])
 def author_detail(request, author_id):
+    '''
+    view an author detail;
+    modify user detail
+    '''
     valid = is_valid_node(request)
     if not valid:
         return Response({"message":"node not allowed"}, status=status.HTTP_403_FORBIDDEN)
@@ -75,6 +85,9 @@ def author_detail(request, author_id):
 #need to be refined!
 @api_view(['POST'])
 def login_view(request):
+    '''
+    author login, return the authors' id
+    '''
     author = authenticate(request, email=request.data['email'], password=request.data['password'])
     print(author)
     if author is not None:
