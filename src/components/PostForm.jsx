@@ -18,7 +18,7 @@ class PostForm extends Component {
       unlisted: false,
       imagePreview: null,
       img: null,
-      privateToAuthor: "",
+      privateToAuthor: ""
     };
     this.onImageChange = this.onImageChange.bind(this);
     this.chooseFile = React.createRef();
@@ -36,9 +36,6 @@ class PostForm extends Component {
       })
     }
   };
-  showOpenFileDlg = () => {
-    this.chooseFile.current.click()
-  };
 
   getBase64 = (file) => {
     var reader = new FileReader();
@@ -50,6 +47,10 @@ class PostForm extends Component {
     })
   };
 
+  showOpenFileDlg = () => {
+    this.chooseFile.current.click()
+  };
+
   handleShow = () => {
     const { show } = this.state;
     this.setState({ show: !show, visibility: "PUBLIC",description: "",title:"",content: "", unlisted: false, imagePreview:null, img:null});
@@ -59,23 +60,20 @@ class PostForm extends Component {
     
     // send to another author
     if (visibility === "PRIVATE") {
-        var res = await axios.get(`api/author/${this.state.privateToAuthor}/`, { auth: { username: "socialdistribution_t21", password: "c404t21"} });
-        // console.log(res.data)
-        var author = res.data;
-        let data = { "type": "post", "post_id": postID };
+        let res = await axios.get(`api/author/${this.state.privateToAuthor}/`, { auth: { username: "socialdistribution_t21", password: "c404t21"} });
+        // console.log(res.data)  
+        let post_data = { "type": "post", "post_id": postID };
         let tmp_author_id = res.data.id.split("/");
         let rcver_id = tmp_author_id[tmp_author_id.length - 1];
-        // see if attribute authorID in author
-        if ("id" in author) {
-        axios.post(`api/author/${rcver_id}/inbox/`, data, { auth: { username: "socialdistribution_t21", password: "c404t21" } });
-        }
+        axios.post(`api/author/${rcver_id}/inbox/`, post_data, { auth: { username: "socialdistribution_t21", password: "c404t21" } });
     }
     else {
         // send to the public
         if (visibility === "PUBLIC") {
-        var res = await axios.get(`api/author/`, { auth: { username: "socialdistribution_t21", password: "c404t21" } });
-        // send to friends
+          const res = await axios.get(`api/author/`, { auth: { username: "socialdistribution_t21", password: "c404t21" } });
+        
         } else if (visibility === "FRIEND") {
+          // send to friends
             var res = await axios.get(`api/author/${authorID}/friends/`, { auth: { username: "socialdistribution_t21", password: "c404t21" } });
             var authors = res.data.items;
         
@@ -102,10 +100,10 @@ class PostForm extends Component {
       var base64String = await this.getBase64(this.state.img);
       var contentType = base64String.slice(5).split(",")[0];
       var content = base64String;
-    } else {
-      var contentType = this.state.contentType;
+    } else if (this.state.contentType === "text/plain" || this.state.contentType === "text/markdown") {
+      contentType = this.state.contentType;
       console.log(contentType)
-      var content = this.state.content;
+      content = this.state.content;
     }
 
     if (title && description && content) {
@@ -126,15 +124,14 @@ class PostForm extends Component {
           this.sendPost(authorID, resId, visibility);
         }
         else {
-          let msg = "this is the unlisted ID:" + resId;
-          alert(msg);
+          alert("this is the unlisted POST ID: " + resId);
         }
 
       } catch (err) {
         console.log(err.message);
       }
     } else {
-      alert("Cannot be empty !");
+      alert("Invalid Post Form !!!");
     }
   }
 
@@ -147,51 +144,33 @@ class PostForm extends Component {
           this.props.authorID !== null ?
             <div id="form-control">
               <Button
-                id="show-btn"
-                variant="outlined"
-                color="primary"
-                className="btn"
-                onClick={this.handleShow}>
-                {show ? "Cancel" : "Create Post"}
+                variant="outlined" color="primary" onClick={this.handleShow}> {show ? "Cancel" : "Create Post"}
               </Button>
               {
                 show ?
                   <div id="post-form">
-                    <h4>New Post</h4>
                     <TextField
-                      style={{ width: 300 }}
-                      id="post-title"
-                      label="Title"
-                      value={title}
+                      style={{ width: 300 }} label="Title" value={title}
                       onChange={(e) => this.setState({ title: e.target.value })}
                     /><br />
                     <TextField
-                      style={{ width: 300 }}
-                      id="post-description"
-                      label="Description"
-                      value={description}
-                      onChange={(e) => this.setState({ description: e.target.value })}
-                    /><br />
+                      style={{ width: 300 }} label="Description" value={description}
+                      onChange={(e) => this.setState({ description: e.target.value })}/>
+                      <br />
                     {
                       contentType === "text/plain" || contentType === "text/markdown" ?
                         <div>
                           <TextField
-                            style={{ width: 350 }}
-                            id="post-content"
-                            label="Content"
-                            multiline
-                            rows={5}
-                            value={content}
-                            onChange={(e) => this.setState({ content: e.target.value })}
-                          /><br />
+                            style={{ width: 350 }} label="Content" multiline rows={10} value={content}
+                            onChange={(e) => this.setState({ content: e.target.value })}/>
+                            <br />
                         </div>
                         :
                         <div>
-                          <Button color="primary" onClick={this.showOpenFileDlg}>Choose Image</Button>
+                          <Button variant="outlined" color="primary" onClick={this.showOpenFileDlg}>Choose Image</Button>
                           <br />
-                          <input type="file" ref={this.chooseFile} onChange={this.onImageChange} style={{ display: 'none' }}
-                            accept="image/png, image/jpeg" />
-                          {this.state.imagePreview ? <div><img className="imagePreview" src={this.state.imagePreview} alt="Unavailable" /></div> : null}
+                          <input type="file" ref={this.chooseFile} onChange={this.onImageChange} style={{ display: 'none' }} accept="image/png, image/jpeg" />
+                          <div><img className="imagePreview" src={this.state.imagePreview} alt="Unavailable" /></div>
                         </div>
                     }
 
@@ -214,22 +193,11 @@ class PostForm extends Component {
                     {
                       this.state.visibility === "PRIVATE" ?
                         <TextField
-                          style={{ margin: 10 }}
-                          value={privateToAuthor}
-                          onChange={(e) => this.setState({ privateToAuthor: e.target.value })}
-                          placeholder="private to"
-                          variant="filled"
-                        />
+                          style={{ margin: 10 }} value={privateToAuthor} onChange={(e) => this.setState({ privateToAuthor: e.target.value })} placeholder="private to" variant="filled"/>
                         :
                         null
                     }
-                    <Button
-                      id="post-btn"
-                      style={{ marginTop: 15 }}
-                      variant="outlined"
-                      color="primary"
-                      onClick={this.handlePost}
-                    >
+                    <Button style={{ marginTop: 15 }} variant="outlined" color="primary" onClick={this.handlePost}>
                       Post
                     </Button>
                   </div>
@@ -238,7 +206,7 @@ class PostForm extends Component {
               }
             </div>
             :
-            null
+            <p>You are not logged in</p>
         }
       </div>
     )

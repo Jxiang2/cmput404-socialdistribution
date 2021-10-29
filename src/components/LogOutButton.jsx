@@ -22,7 +22,7 @@ class LogOutButton extends Component {
 }
 
 
-// write to redux
+// write to redux, set current user to null
 const mapDispatchToProps = (dispatch) => ({
     setCurrentUser: user => {
         dispatch(setCurrentUser(user))

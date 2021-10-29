@@ -8,7 +8,9 @@ const UserHeader = (props) => {
   return (
     <div id="user-header">
       <h1>Welcome To Social Distribution,  {props.currentUser.displayName} </h1>
-      <hr />
+      <hr/>
+      <hr/>
+      <hr/>
       <div>
         <Avatar id="user-avatar">{props.currentUser.displayName.slice(0, 1)}</Avatar>
         <div id="user-info">

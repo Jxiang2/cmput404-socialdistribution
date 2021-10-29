@@ -37,10 +37,11 @@ class HomePage extends Component {
             });
             console.log(res.data.posts);
             this.setState({publicPosts: res.data.posts.filter((post)=>{
-                return post.visibility === "PUBLIC";
+                // only show the public posts
+                return post.visibility === "PUBLIC" && post.unlisted  === false;
             })});
-        } catch (e) {
-            console.log(e);
+            } catch (e) {
+                console.log(e);
             }   
         } else {
             alert('Not Logged In!');

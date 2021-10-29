@@ -7,43 +7,30 @@ import '../styles/PostItem.css'
 
 // This component is used to display the Post
 class PostItem extends Component {
-  state = {
-    title: "",
-    source: "",
-    origin: "",
-    description: "",
-    contentType: "",
-    content: "",
-    visibility: "",
-    unlisted: false,
-  }
 
   renderPostContent = () => {
+    
     const { contentType } = this.props.post;
-    const { visibility } = this.props.post;
-    console.log(visibility)
     console.log(contentType)
-    if (visibility === "PUBLIC") {
-      // console.log("I am Here")
-      switch (contentType) {
-      case "text/markdown":
-        return <ReactMarkDown>{this.props.post.content}</ReactMarkDown>;
-      case "text/plain":
-        return <p>{this.props.post.content}</p>;
-      case "image/png;base64":
-      case "image/jpeg;base64":
-        return <div><img className="imagePreview" src={this.props.post.content} alt="Unavailable" /></div>
-      default:
-        return <p>{this.props.post.content}</p>;
-      }
+    // console.log("I am Here")
+    switch (contentType) {
+    case "text/plain":
+      return <p>{this.props.post.content}</p>;
+    case "text/markdown":
+      return <ReactMarkDown>{this.props.post.content}</ReactMarkDown>;
+    case "image/png;base64":
+    case "image/jpeg;base64":
+      return <div><img className="imagePreview" src={this.props.post.content} alt="Unavailable" /></div>
+    default:
+      return <p>{this.props.post.content}</p>;
     }
   }
 
 
   deletepostClick = async () => {
-    var login_author_id = this.props.authorID
-    var post_author_id = this.props.post.author_id
-    var post_id = this.props.post.id
+    let login_author_id = this.props.authorID
+    let post_author_id = this.props.post.author_id
+    let post_id = this.props.post.id
     let tmp_post_id = post_id.split("/");
 
     let resId = tmp_post_id[tmp_post_id.length - 1];
@@ -57,7 +44,7 @@ class PostItem extends Component {
              password: "c404t21" } 
             })
         if (res.status === 200) {
-        //   window.location = '/home'
+            // re-pull all posts from backend
             this.props.handlePostView();
         }
       } catch (err) {
@@ -71,9 +58,10 @@ class PostItem extends Component {
     return (
       <div style={{ border: "solid 1px grey" }}>
         <h1>{this.props.post.title}</h1>
-        <h3>{this.props.post.author.displayName}</h3>
-        <h3>description: {this.props.post.description}</h3>
+        <h4>{this.props.post.author.displayName}</h4>
+        <h4>description: {this.props.post.description}</h4>
         <p id="post-text">{this.renderPostContent()}</p>
+        <h4>published at {Date(this.props.post.published)}</h4>
         <Button style={{color:"black", backgroundColor:"grey"}} 
         onClick={this.deletepostClick}>Delete</Button>
         <br/>
@@ -81,6 +69,7 @@ class PostItem extends Component {
     )
   }
 }
+
 
 const mapStateToProps = (state) => ({
   authorID: state.user.authorID
