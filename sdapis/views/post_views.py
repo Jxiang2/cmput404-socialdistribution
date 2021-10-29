@@ -12,6 +12,9 @@ HOST_NAME = settings.HOST_NAME
 
 @api_view(['GET'])
 def all_post_view(request):
+    '''
+    get all posts, ordered by published time
+    '''
     valid = is_valid_node(request)
     if not valid:
         return Response({"message":"not a valid node"}, status=status.HTTP_403_FORBIDDEN)
@@ -27,6 +30,10 @@ def all_post_view(request):
 
 @api_view(['GET', 'POST'])
 def post_view(request, author_id):
+    '''
+    get an author's all posts,
+    create a post
+    '''
     valid = is_valid_node(request)
     if not valid:
         return Response({"message":"not a valid node"}, status=status.HTTP_403_FORBIDDEN)
@@ -53,6 +60,9 @@ def post_view(request, author_id):
 
 @api_view(['GET','DELETE', 'PUT', 'POST'])
 def post_detail_view(request, author_id, post_id):
+    '''
+    view a post's detail, delete a post(authenticated), forward a post, update a post(authenticated)
+    '''
     valid = is_valid_node(request)
     if not valid:
         return Response({"message":"not a valid node"}, status=status.HTTP_403_FORBIDDEN)
