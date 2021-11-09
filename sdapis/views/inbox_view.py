@@ -22,7 +22,7 @@ def inbox_detail(request, author_id):
     # get inbox objs
     if request.method == 'GET':
         try:
-            this_author = Author.objects.get(author_id=author_id)
+            Author.objects.get(author_id=author_id)
         except Author.DoesNotExist:
             return Response({"message":"author id not found"}, status=status.HTTP_404_NOT_FOUND)
         inbox, created = Inbox.objects.get_or_create(author_id=author_id)
@@ -36,7 +36,7 @@ def inbox_detail(request, author_id):
             inbox.delete()
         return Response({'message':'inbox cleared'}, status=status.HTTP_200_OK)
 
-    # post follow like
+    # send to others' inbox
     elif request.method == 'POST':
         type = request.data['type']
 
