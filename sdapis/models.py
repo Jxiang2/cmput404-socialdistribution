@@ -69,24 +69,6 @@ class Post(models.Model):
     def get_type(self):
         return "post"
 
-class Comment(models.Model):
-    comment = models.TextField()
-    contentType = models.CharField(max_length=20, default="text/plain")
-    published = models.DateTimeField(auto_now_add=True)
-    comment_id = models.UUIDField(primary_key=True, default=uuid_hex, unique=True)
-    # author 1 <-> * comment
-    comment_author = models.ForeignKey(Author, on_delete=CASCADE)
-    # post 1 <-> * comment
-    post = models.ForeignKey(Post, on_delete=CASCADE)
-    # def get_id(self):
-    # return settings.HOST_URL + "author/" + self.authorID
-
-    def get_comment_id(self):
-        return "{}/api/author/{}/posts/{}/comments/{}".format(HOST_NAME, self.comment_author.author_id, str(self.post_of_comment.post_id),str(self.comment_id))
-
-    def get_type(self):
-        return "comment"
-
 class Follow(models.Model):
     # author2 follows author1
     author1 = models.CharField(max_length=50)
@@ -94,7 +76,8 @@ class Follow(models.Model):
 
 class Inbox(models.Model):
     author_id = models.CharField(max_length=40, unique=True)
-    items = ArrayField(models.JSONField(), default=list) # array of objects
+    #postgres provided list of objects
+    items = ArrayField(models.JSONField(), default=list)
 
     def get_author(self):
         return settings.HOST_NAME + "author/" + self.author_id
