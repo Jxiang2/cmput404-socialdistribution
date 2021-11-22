@@ -1,11 +1,14 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from sdapis.models import Follow
 from .follow_helper import get_followers, get_followings
 from .node_helper import is_valid_node
+from sdapis.permissions import CustomAuthentication, AccessPermission
 
 @api_view(['GET'])
+@authentication_classes([CustomAuthentication])
+@permission_classes([AccessPermission])
 def following_list(request, author_id):
     '''
     get the list of authors that the current author is following
@@ -17,7 +20,10 @@ def following_list(request, author_id):
     followings = get_followings(author_id)
     return Response({"type" : "followings" , "items" : followings}, status=status.HTTP_200_OK)
 
+
 @api_view(['GET'])
+@authentication_classes([CustomAuthentication])
+@permission_classes([AccessPermission])
 def follower_list(request, author_id):
     '''
     get the follower list of a current user
@@ -32,6 +38,8 @@ def follower_list(request, author_id):
 
 
 @api_view(['GET', 'DELETE', 'PUT'])
+@authentication_classes([CustomAuthentication])
+@permission_classes([AccessPermission])
 def follower(request, author_id, author_id2):
     '''
     author_id2 follows author_id,

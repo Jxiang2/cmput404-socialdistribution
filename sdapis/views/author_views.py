@@ -1,16 +1,18 @@
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from sdapis.models import Author
 from sdapis.serializers import RegistrationSerializer, AuthorSerializer
 from sdapis.pagination import AuthorPagination
 from .node_helper import is_valid_node
-
+from sdapis.permissions import AccessPermission, CustomAuthentication
 
 @api_view(['POST'])
+@authentication_classes([CustomAuthentication])
+@permission_classes([AccessPermission])
 def register(request):
     '''
     author registration; parameters: username, email, password, github
@@ -32,6 +34,8 @@ def register(request):
 #login
 #need to be refined!
 @api_view(['POST'])
+@authentication_classes([CustomAuthentication])
+@permission_classes([AccessPermission])
 def login_view(request):
     '''
     author login, return the authors' id
@@ -43,7 +47,10 @@ def login_view(request):
     else:
         return Response({'message':"incorrect email or password"}, status=status.HTTP_401_UNAUTHORIZED)
 
+
 @api_view(['GET'])
+@authentication_classes([CustomAuthentication])
+@permission_classes([AccessPermission])
 def author_list(request):
     '''
     get the list of authors
@@ -60,7 +67,10 @@ def author_list(request):
         serializer = AuthorSerializer(paginated, many=True)
         return paginator.get_paginated_response(serializer.data)
 
+
 @api_view(['GET', 'POST'])
+@authentication_classes([CustomAuthentication])
+@permission_classes([AccessPermission])
 def author_detail(request, author_id):
     '''
     view an author detail;

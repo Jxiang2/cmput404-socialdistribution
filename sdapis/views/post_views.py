@@ -1,4 +1,4 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
@@ -7,10 +7,14 @@ from sdapis.pagination import PostPagination
 from sdapis.serializers import PostSerializer
 from sdapis.models import Post, Author
 from .node_helper import is_valid_node
+from sdapis.permissions import CustomAuthentication, AccessPermission
 
 HOST_NAME = settings.HOST_NAME
 
+
 @api_view(['GET'])
+@authentication_classes([CustomAuthentication])
+@permission_classes([AccessPermission])
 def all_post_view(request):
     '''
     get all posts, ordered by published time
@@ -29,6 +33,8 @@ def all_post_view(request):
 
 
 @api_view(['GET', 'POST'])
+@authentication_classes([CustomAuthentication])
+@permission_classes([AccessPermission])
 def post_view(request, author_id):
     '''
     get an author's all posts,
@@ -59,6 +65,8 @@ def post_view(request, author_id):
 
 
 @api_view(['GET','DELETE', 'PUT', 'POST'])
+@authentication_classes([CustomAuthentication])
+@permission_classes([AccessPermission])
 def post_detail_view(request, author_id, post_id):
     '''
     view a post's detail, delete a post(authenticated), forward a post, update a post(authenticated)
